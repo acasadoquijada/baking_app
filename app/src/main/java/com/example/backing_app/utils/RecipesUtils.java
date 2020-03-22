@@ -17,6 +17,7 @@ public class RecipesUtils {
 
     private static String TAG = RecipesUtils.class.getSimpleName();
 
+    private static String id_token = "id";
     private static String name_token = "name";
     private static String ingredients_token = "ingredients";
     private static String steps_token = "steps";
@@ -119,16 +120,11 @@ public class RecipesUtils {
 
     private static Recipe parseRecipe(JSONObject recipeJSON){
 
-        String name;
-        String servings;
-        String image;
-        List<Ingredient> ingredients;
-        List<Step> steps;
-
         Recipe recipe = new Recipe();
 
         try {
 
+            recipe.setId(recipeJSON.getInt(id_token));
             recipe.setName(recipeJSON.getString(name_token));
 
             recipe.setServings(recipeJSON.getString(servings_token));
@@ -143,10 +139,8 @@ public class RecipesUtils {
             e.printStackTrace();
             return null;
         }
-
         return recipe;
     }
-
 
     public static List<Recipe> getRecipes(){
 

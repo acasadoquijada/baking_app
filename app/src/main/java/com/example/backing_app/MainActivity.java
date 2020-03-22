@@ -1,8 +1,11 @@
 package com.example.backing_app;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.app.ProgressDialog;
 import android.graphics.Movie;
@@ -19,6 +22,7 @@ import com.example.backing_app.ui.RecipeFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
 import com.example.backing_app.utils.NetworkUtils;
 import com.example.backing_app.utils.RecipesUtils;
+import com.example.backing_app.viewmodel.RecipeViewModel;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,19 +30,26 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<Recipe> mRecipes;
+    public static List<Recipe> mRecipes;
+    private RecipeViewModel mRecipeViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // First I need to get the recipe info. From internet or database
+        mRecipeViewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
+
         AppExecutorUtils.getsInstance().networkIO().execute(new Runnable() {
             @Override
             public void run() {
-                mRecipes = RecipesUtils.getRecipes();
-                setFragments();
+                mRecipes = mRecipeViewModel.getRecipes();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setFragments();
+                    }
+                });
             }
         });
     }
