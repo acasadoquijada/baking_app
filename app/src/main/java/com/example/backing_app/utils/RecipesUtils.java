@@ -129,7 +129,7 @@ public class RecipesUtils {
 
         try {
 
-            recipe.setImage(recipeJSON.getString(name_token));
+            recipe.setName(recipeJSON.getString(name_token));
 
             recipe.setServings(recipeJSON.getString(servings_token));
 
