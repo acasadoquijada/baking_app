@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:rowCount="4"
+        android:columnCount="2"
+        android:orientation="horizontal"
+        android:layout_marginBottom="36dp">
+        <FrameLayout
+            android:layout_width="350dp"
+            android:layout_height="180dp"
+            android:scaleType="centerInside"
+            android:layout_gravity="center"
+            android:id="@+id/recipe_1"/>
+
+        <FrameLayout
+            android:layout_width="350dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:id="@+id/recipe_2"/>
+
+        <FrameLayout
+            android:layout_width="350dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:id="@+id/recipe_3"/>
+
+        <FrameLayout
+            android:layout_width="350dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:id="@+id/recipe_4"/>
+
+    </GridLayout>
+
+
+</ScrollView>

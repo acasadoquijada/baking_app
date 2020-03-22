@@ -1,18 +1,25 @@
 package com.example.backing_app.recipe;
 
-import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.RequiresApi;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.example.backing_app.database.IngredientListConverter;
+import com.example.backing_app.database.StepListConverter;
 
 import java.util.List;
 
 /**
  * POJO representing a Recipe
  */
+
+@Entity(tableName = "recipes")
 public class Recipe implements Parcelable {
 
+    @PrimaryKey
     private int id;
     private String name;
     private List<Ingredient> ingredients;
@@ -23,7 +30,6 @@ public class Recipe implements Parcelable {
     public Recipe(){
 
     }
-
 
     protected Recipe(Parcel in) {
         id = in.readInt();
@@ -58,10 +64,12 @@ public class Recipe implements Parcelable {
         return name;
     }
 
+    @TypeConverters({IngredientListConverter.class})
     public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
+    @TypeConverters({StepListConverter.class})
     public List<Step> getSteps() {
         return steps;
     }
