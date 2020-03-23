@@ -28,15 +28,15 @@ public class RecipeFragment extends Fragment {
     public static final String BUNDLE_TOKEN = "recipe_id";
     public static final String RECIPE_TOKEN_ID = "recipe_id";
 
-    private Recipe mRecipe;
-    private RecipeViewModel mRecipeViewModel;
+    public static final String RECIPE_NAME_KEY = "recipe_name";
+    public static final String RECIPE_ID_KEY = "recipe_id";
+    public static final String RECIPE_SERVING_KEY = "recipe_serving";
+
     private int mRecipeIndex;
+    private String mRecipeName;
+    private String mRecipeServing;
 
     public RecipeFragment(){
-    }
-
-    public RecipeFragment(Recipe recipe){
-        this.mRecipe = recipe;
     }
 
     @Override
@@ -50,7 +50,10 @@ public class RecipeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if(savedInstanceState != null) {
-            mRecipe = savedInstanceState.getParcelable(RECIPE_KEY);
+            mRecipeName = savedInstanceState.getString(RECIPE_NAME_KEY);
+            mRecipeIndex = savedInstanceState.getInt(RECIPE_ID_KEY);
+            mRecipeServing = savedInstanceState.getString(RECIPE_SERVING_KEY);
+
         }
 
         View rootView = inflater.inflate(R.layout.fragment_recipe,container,false);
@@ -61,21 +64,21 @@ public class RecipeFragment extends Fragment {
 
         TextView recipeServingView = cardView.findViewById(R.id.recipe_serving);
 
-        recipeTextView.setText(mRecipe.getName());
+        recipeTextView.setText(mRecipeName);
 
         recipeServingView.setText(getString(R.string.serving_prefix));
 
-        recipeServingView.append( " " + mRecipe.getServings() + " ");
+        recipeServingView.append( " " + mRecipeServing + " ");
 
         recipeServingView.append(getString(R.string.serving_suffix));
 
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG,mRecipe.getName());
+                Log.d(TAG,mRecipeName);
                 Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
 
-                intent.putExtra(RECIPE_TOKEN_ID, getRecipe().getId());
+                intent.putExtra(RECIPE_ID_KEY, mRecipeIndex);
 
                 startActivity(intent);
             }
@@ -84,13 +87,22 @@ public class RecipeFragment extends Fragment {
         return rootView;
     }
 
+    public void setRecipeIndex(int mRecipeIndex) {
+        this.mRecipeIndex = mRecipeIndex;
+    }
 
-    private Recipe getRecipe() {
-        return mRecipe;
+    public void setRecipeName(String mRecipeName) {
+        this.mRecipeName = mRecipeName;
+    }
+
+    public void setRecipeServing(String mRecipeServing) {
+        this.mRecipeServing = mRecipeServing;
     }
 
     @Override
     public void onSaveInstanceState(Bundle currentState) {
-        currentState.putParcelable(RECIPE_KEY,mRecipe);
+        currentState.putString(RECIPE_NAME_KEY,mRecipeName);
+        currentState.putInt(RECIPE_ID_KEY,mRecipeIndex);
+        currentState.putString(RECIPE_SERVING_KEY,mRecipeServing);
     }
 }
