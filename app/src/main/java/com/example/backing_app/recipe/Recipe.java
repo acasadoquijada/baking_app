@@ -3,7 +3,10 @@ package com.example.backing_app.recipe;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
@@ -12,17 +15,23 @@ import com.example.backing_app.database.StepListConverter;
 
 import java.util.List;
 
+import static androidx.room.ForeignKey.CASCADE;
+
 /**
  * POJO representing a Recipe
  */
 
 @Entity(tableName = "recipes")
+
 public class Recipe implements Parcelable {
 
     @PrimaryKey
     private int id;
+
     private String name;
+    @Ignore
     private List<Ingredient> ingredients;
+    @Ignore
     private List<Step> steps;
     private String servings;
     private String image;

@@ -22,8 +22,6 @@ public class RecipeViewModel extends AndroidViewModel {
     private static final String TAG = RecipeViewModel.class.getSimpleName();
     private List<Recipe> mRecipes;
     private RecipeDataBase mDatabase;
-    private static final Object LOCK = new Object();
-    private static RecipeViewModel sInstance;
 
     public RecipeViewModel(@NonNull Application application) {
         super(application);
@@ -31,17 +29,13 @@ public class RecipeViewModel extends AndroidViewModel {
         Log.d(TAG,"I CREATE");
     }
 
-    public Recipe getRecipe(int recipe_id){
-
-        if(recipe_id < mRecipes.size()){
-            return mRecipes.get(recipe_id);
-        }
-        return null;
-    }
-
-
     public List<Recipe> getRecipes(){
+
+      //  mRecipes = RecipesUtils.getRecipes();
+
+        String s = "AA";
         if(mRecipes == null){
+
             mRecipes = mDatabase.recipeDAO().getRecipes();
 
             if(mRecipes.size() == 0){
@@ -57,9 +51,13 @@ public class RecipeViewModel extends AndroidViewModel {
 
                 for(int i = 0; i < mRecipes.size(); i++){
                     mDatabase.recipeDAO().insertRecipe(mRecipes.get(i));
-                }
-            }
 
+                    for(int j = 0; j < mRecipes.get(i).getSteps().size(); j++){
+                        mDatabase.stepDAO().insertStep(mRecipes.get(i).getSteps().get(j));
+                    }
+                }
+
+            }
         }
         return mRecipes;
     }

@@ -12,7 +12,6 @@ import com.example.backing_app.utils.AppExecutorUtils;
 import com.example.backing_app.viewmodel.RecipeViewModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,14 +33,18 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        setupFragments();
+                        populateUI();
                     }
                 });
             }
         });
     }
 
-    private void setupFragments() {
+    /**
+     * Creates all the RecipeFragment needed for the recipes
+     */
+
+    private void populateUI() {
 
         if (mRecipes.size() > 0) {
 

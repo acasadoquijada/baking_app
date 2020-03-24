@@ -88,7 +88,7 @@ public class RecipesUtils {
         return ingredients;
     }
 
-    private static List<Step> parseSteps(JSONArray stepsJSON){
+    private static List<Step> parseSteps(JSONArray stepsJSON, int recipe_id){
 
         List<Step> steps = new ArrayList<>();
         try{
@@ -98,10 +98,14 @@ public class RecipesUtils {
                 Step step = new Step();
 
                 JSONObject stepJSON = stepsJSON.getJSONObject(i);
+
+                step.setIndex(stepJSON.getInt(id_token));
                 step.setDescription(stepJSON.getString(description_token));
                 step.setShortDescription(stepJSON.getString(short_description_token));
                 step.setThumbailURL(stepJSON.getString(thumbnail_url_token));
                 step.setVideoURL(stepJSON.getString(video_url_token));
+
+                step.setRecipeId(recipe_id);
 
                 steps.add(step);
                 Log.d(TAG,step.getDescription());
@@ -125,6 +129,7 @@ public class RecipesUtils {
         try {
 
             recipe.setId(recipeJSON.getInt(id_token));
+
             recipe.setName(recipeJSON.getString(name_token));
 
             recipe.setServings(recipeJSON.getString(servings_token));
@@ -133,7 +138,7 @@ public class RecipesUtils {
 
             recipe.setIngredients(parseIngredients(recipeJSON.getJSONArray(ingredients_token)));
 
-            recipe.setSteps(parseSteps(recipeJSON.getJSONArray(steps_token)));
+            recipe.setSteps(parseSteps(recipeJSON.getJSONArray(steps_token),recipe.getId()));
 
         } catch (JSONException e) {
             e.printStackTrace();

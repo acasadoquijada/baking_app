@@ -3,6 +3,13 @@ package com.example.backing_app.recipe;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+
+import static androidx.room.ForeignKey.CASCADE;
+
+
+
 public class Ingredient implements Parcelable {
     private int quantity;
     private String measure;

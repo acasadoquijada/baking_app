@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.example.backing_app.R;
 import com.example.backing_app.RecipeDetailActivity;
 import com.example.backing_app.recipe.Recipe;
+import com.example.backing_app.utils.AppExecutorUtils;
 import com.example.backing_app.viewmodel.RecipeViewModel;
 
 
@@ -24,10 +25,7 @@ public class RecipeFragment extends Fragment {
 
     private static final String TAG = RecipeFragment.class.getSimpleName();
 
-    public static final String RECIPE_KEY = "recipe";
-    public static final String BUNDLE_TOKEN = "recipe_id";
     public static final String RECIPE_TOKEN_ID = "recipe_id";
-
     public static final String RECIPE_NAME_KEY = "recipe_name";
     public static final String RECIPE_ID_KEY = "recipe_id";
     public static final String RECIPE_SERVING_KEY = "recipe_serving";

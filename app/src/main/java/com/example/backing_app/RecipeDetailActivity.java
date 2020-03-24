@@ -2,6 +2,7 @@ package com.example.backing_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -16,13 +17,19 @@ import android.widget.TextView;
 
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.recipe.Recipe;
+import com.example.backing_app.recipe.Step;
 import com.example.backing_app.ui.RecipeFragment;
+import com.example.backing_app.ui.StepFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
     private RecipeDataBase mDatabase;
     private Recipe recipe;
+    private List<Step> steps;
 
     private static final String TAG = RecipeDetailActivity.class.getSimpleName();
     @Override
@@ -42,16 +49,19 @@ public class RecipeDetailActivity extends AppCompatActivity {
             @Override
             public void run() {
                 recipe = mDatabase.recipeDAO().getRecipe(recipe_index);
+                steps = mDatabase.stepDAO().getSteps(recipe_index);
+
+                String s = "A";
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
-                        setupIngredients();
-
+                        //setupIngredients();
+                        //setUpSteps();
                         for(int i = 0; i < recipe.getIngredients().size(); i++){
-                            Log.d(TAG,recipe.getIngredients().get(i).getIngredientName());
+/*                            Log.d(TAG,recipe.getIngredients().get(i).getIngredientName());
                             Log.d(TAG,String.valueOf(recipe.getIngredients().get(i).getQuantity()));
-                            Log.d(TAG,recipe.getIngredients().get(i).getMeasure());
+                            Log.d(TAG,recipe.getIngredients().get(i).getMeasure());*/
                         }
                     }
                 });
@@ -59,9 +69,22 @@ public class RecipeDetailActivity extends AppCompatActivity {
         });
     }
 
+    private void setUpSteps(){
+
+        int orientation = getResources().getConfiguration().orientation;
+
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            StepFragment stepFragment = new StepFragment();
+            stepFragment.setShortDescription(recipe.getSteps().get(0).getShortDescription());
+            fragmentManager.beginTransaction().add(R.id.step_1, stepFragment).commit();
+        }
+    }
+
     private void setupIngredients(){
 
-        //  We get the father Linear Layout
+        //  We get the parent layout according to the screen orientation
 
         int orientation = getResources().getConfiguration().orientation;
 

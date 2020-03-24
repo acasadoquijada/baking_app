@@ -8,8 +8,9 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.example.backing_app.recipe.Recipe;
+import com.example.backing_app.recipe.Step;
 
-@Database(entities = {Recipe.class}, version = 1, exportSchema = false)
+@Database(entities = {Recipe.class, Step.class}, version = 1, exportSchema = false)
 @TypeConverters({StepListConverter.class, IngredientListConverter.class})
 public abstract class RecipeDataBase extends RoomDatabase {
 
@@ -31,5 +32,5 @@ public abstract class RecipeDataBase extends RoomDatabase {
     }
 
     public abstract RecipeDAO recipeDAO();
-
+    public abstract StepDAO stepDAO();
 }

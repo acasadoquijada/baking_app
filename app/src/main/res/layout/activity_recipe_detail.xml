@@ -16,6 +16,7 @@
         android:textSize="32sp"
         android:textStyle="bold"/>
 
+
     <!--
         <include layout="@layout/ingredient_layout"
             android:id="@+id/ingredient"/>
@@ -47,4 +48,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="STEP!!"/> -->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:scaleType="centerInside"
+        android:id="@+id/step_1"/>
+
 </LinearLayout>
