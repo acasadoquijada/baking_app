@@ -59,7 +59,7 @@ public class RecipesUtils {
         return recipes;
     }
 
-    private static List<Ingredient> parseIngredients(JSONArray ingredientsJSON){
+    private static List<Ingredient> parseIngredients(JSONArray ingredientsJSON,int recipe_id){
 
         List<Ingredient> ingredients = new ArrayList<>();
 
@@ -73,6 +73,8 @@ public class RecipesUtils {
                 ingredient.setIngredientName(ingredientJSON.getString(ingredient_name_token));
                 ingredient.setMeasure(ingredientJSON.getString(measure_token));
                 ingredient.setQuantity(ingredientJSON.getInt(quantity_token));
+
+                ingredient.setRecipeId(recipe_id);
 
                 ingredients.add(ingredient);
                 Log.d(TAG,ingredient.getIngredientName());
@@ -136,7 +138,7 @@ public class RecipesUtils {
 
             recipe.setImage(recipeJSON.getString(image_token));
 
-            recipe.setIngredients(parseIngredients(recipeJSON.getJSONArray(ingredients_token)));
+            recipe.setIngredients(parseIngredients(recipeJSON.getJSONArray(ingredients_token),recipe.getId()));
 
             recipe.setSteps(parseSteps(recipeJSON.getJSONArray(steps_token),recipe.getId()));
 

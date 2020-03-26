@@ -3,17 +3,32 @@ package com.example.backing_app.recipe;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
 
+@Entity(tableName = "ingredients",
+        indices =  {@Index("recipeId")},
+        foreignKeys = @ForeignKey(entity = Recipe.class,
+                parentColumns = "id",
+                childColumns = "recipeId",
+                onDelete = CASCADE))
 
 public class Ingredient implements Parcelable {
+
+    @PrimaryKey(autoGenerate = true)
+    private int key;
     private int quantity;
     private String measure;
     private String ingredientName;
+
+    @ColumnInfo(name = "recipeId")
+    private int recipeId;
 
     protected Ingredient(Parcel in) {
         quantity = in.readInt();
@@ -36,6 +51,22 @@ public class Ingredient implements Parcelable {
             return new Ingredient[size];
         }
     };
+
+    public int getKey() {
+        return key;
+    }
+
+    public int getRecipeId() {
+        return recipeId;
+    }
+
+    public void setKey(int key) {
+        this.key = key;
+    }
+
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
+    }
 
     public int getQuantity() {
         return quantity;

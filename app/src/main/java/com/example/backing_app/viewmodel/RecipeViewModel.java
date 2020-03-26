@@ -31,8 +31,6 @@ public class RecipeViewModel extends AndroidViewModel {
 
     public List<Recipe> getRecipes(){
 
-      //  mRecipes = RecipesUtils.getRecipes();
-
         String s = "AA";
         if(mRecipes == null){
 
@@ -52,8 +50,14 @@ public class RecipeViewModel extends AndroidViewModel {
                 for(int i = 0; i < mRecipes.size(); i++){
                     mDatabase.recipeDAO().insertRecipe(mRecipes.get(i));
 
+                    // Store the steps
                     for(int j = 0; j < mRecipes.get(i).getSteps().size(); j++){
                         mDatabase.stepDAO().insertStep(mRecipes.get(i).getSteps().get(j));
+                    }
+
+                    // Store the ingredients
+                    for(int j = 0; j < mRecipes.get(i).getIngredients().size(); j++){
+                        mDatabase.ingredientDAO().insertIngredient(mRecipes.get(i).getIngredients().get(j));
                     }
                 }
 

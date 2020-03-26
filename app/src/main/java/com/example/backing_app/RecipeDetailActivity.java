@@ -6,21 +6,22 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.backing_app.database.RecipeDataBase;
-import com.example.backing_app.recipe.Recipe;
+import com.example.backing_app.recipe.Ingredient;
 import com.example.backing_app.recipe.Step;
+import com.example.backing_app.ui.MasterListFragment;
 import com.example.backing_app.ui.RecipeFragment;
 import com.example.backing_app.ui.StepFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +29,9 @@ import java.util.List;
 public class RecipeDetailActivity extends AppCompatActivity {
 
     private RecipeDataBase mDatabase;
-    private Recipe recipe;
-    private List<Step> steps;
+
+    private List<Step> mSteps;
+    private List<Ingredient> mIngredients;
 
     private static final String TAG = RecipeDetailActivity.class.getSimpleName();
     @Override
@@ -48,25 +50,28 @@ public class RecipeDetailActivity extends AppCompatActivity {
         AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                recipe = mDatabase.recipeDAO().getRecipe(recipe_index);
-                steps = mDatabase.stepDAO().getSteps(recipe_index);
-
-                String s = "A";
+                mSteps = mDatabase.stepDAO().getSteps(recipe_index);
+                mIngredients = mDatabase.ingredientDAO().getIngredients(recipe_index);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
+                        setUpFragments();
                         //setupIngredients();
                         //setUpSteps();
-                        for(int i = 0; i < recipe.getIngredients().size(); i++){
-/*                            Log.d(TAG,recipe.getIngredients().get(i).getIngredientName());
-                            Log.d(TAG,String.valueOf(recipe.getIngredients().get(i).getQuantity()));
-                            Log.d(TAG,recipe.getIngredients().get(i).getMeasure());*/
-                        }
                     }
                 });
             }
         });
+    }
+
+    private void setUpFragments(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        MasterListFragment masterListFragment = new MasterListFragment();
+
+        masterListFragment.setStepsList(mSteps); // this can be an step index
+
+        fragmentManager.beginTransaction().add(R.id.step_1,masterListFragment).commit();
     }
 
     private void setUpSteps(){
@@ -77,9 +82,26 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             StepFragment stepFragment = new StepFragment();
-            stepFragment.setShortDescription(recipe.getSteps().get(0).getShortDescription());
+            stepFragment.setShortDescription(mSteps.get(0).getShortDescription());
             fragmentManager.beginTransaction().add(R.id.step_1, stepFragment).commit();
         }
+    }
+
+
+    private TextView createIngredientsLabel(){
+
+        TextView ingredientsLabelTextView = new TextView(this);
+
+        ingredientsLabelTextView.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        ingredientsLabelTextView.setTextSize(32);
+        ingredientsLabelTextView.setTypeface(Typeface.DEFAULT_BOLD);
+
+        ingredientsLabelTextView.setText(getString(R.string.ingredients_label));
+
+        return ingredientsLabelTextView;
     }
 
     private void setupIngredients(){
@@ -97,9 +119,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
         }
 
 
+        // Create section label
+        TextView ingredientsLabelTextView = createIngredientsLabel();
+
+        ingredientsLinearLayout.addView(ingredientsLabelTextView, ingredientsLinearLayout.getChildCount());
         // Create constrain layout per ingredient
 
-        int ingredients_size = recipe.getIngredients().size();
+        int ingredients_size = mIngredients.size();
 
         for(int i = 0; i < ingredients_size; i++){
 
@@ -113,9 +139,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
             String bullet_point = "\u2022";
 
-            textView.append(bullet_point + " " + recipe.getIngredients().get(i).getIngredientName());
-            textView2.setText(recipe.getIngredients().get(i).getMeasure());
-            textView3.setText(String.valueOf(recipe.getIngredients().get(i).getQuantity()));
+            textView.append(bullet_point + " " + mIngredients.get(i).getIngredientName());
+            textView2.setText(mIngredients.get(i).getMeasure());
+            textView3.setText(String.valueOf(mIngredients.get(i).getQuantity()));
 
             ConstraintLayout.LayoutParams l = new ConstraintLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,

@@ -9,50 +9,9 @@
     tools:context=".RecipeDetailActivity"
     android:id="@+id/ingredients_linear_layout">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ingredients"
-        android:textSize="32sp"
-        android:textStyle="bold"/>
-
-
-    <!--
-        <include layout="@layout/ingredient_layout"
-            android:id="@+id/ingredient"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ingredients!!"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="STEP!!"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="STEP!!"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="STEP!!"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="STEP!!"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="STEP!!"/> -->
-
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:scaleType="centerInside"
+        android:layout_height="match_parent"
         android:id="@+id/step_1"/>
 
 </LinearLayout>

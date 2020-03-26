@@ -18,6 +18,7 @@ public class StepFragment extends Fragment {
     private String mShortDescription;
 
     private static String TAG = StepFragment.class.getSimpleName();
+
     public StepFragment(){
 
     }
