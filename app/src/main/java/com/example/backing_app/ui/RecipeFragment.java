@@ -51,7 +51,6 @@ public class RecipeFragment extends Fragment {
             mRecipeName = savedInstanceState.getString(RECIPE_NAME_KEY);
             mRecipeIndex = savedInstanceState.getInt(RECIPE_ID_KEY);
             mRecipeServing = savedInstanceState.getString(RECIPE_SERVING_KEY);
-
         }
 
         View rootView = inflater.inflate(R.layout.fragment_recipe,container,false);

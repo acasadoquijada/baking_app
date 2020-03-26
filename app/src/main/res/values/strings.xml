@@ -3,4 +3,5 @@
     <string name="serving_prefix">Recipe for</string>
     <string name="serving_suffix">people</string>
     <string name="ingredients_label">Ingredients</string>
+    <string name="steps_label">Steps</string>
 </resources>

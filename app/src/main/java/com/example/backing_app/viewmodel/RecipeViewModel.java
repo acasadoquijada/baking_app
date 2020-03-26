@@ -29,7 +29,7 @@ public class RecipeViewModel extends AndroidViewModel {
         Log.d(TAG,"I CREATE");
     }
 
-    public List<Recipe> getRecipes(){
+    public List<Recipe> loadData(){
 
         String s = "AA";
         if(mRecipes == null){

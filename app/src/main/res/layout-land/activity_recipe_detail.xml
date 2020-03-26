@@ -1,24 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent">
 
-<LinearLayout     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ingredients"
-        android:textSize="32sp"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
-        android:textStyle="bold"/>
-<GridLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/ingredients_grid_layout"
-    android:orientation="horizontal"
-    android:columnCount="2">
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/ingredients_label"/>
+        <GridLayout xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="8dp"
+            android:columnCount="2"
+            tools:context=".RecipeDetailActivity"
+            android:id="@+id/recipe_details_ingredients_grid_layout">
 
+        </GridLayout>
 
-</GridLayout>
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/steps_label"/>
+        <FrameLayout
+            android:scaleType="centerInside"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/steps_frame_layout"/>
+
+    </LinearLayout>
+</ScrollView>

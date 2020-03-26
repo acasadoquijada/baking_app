@@ -90,6 +90,14 @@ public class RecipesUtils {
         return ingredients;
     }
 
+    private static String getQualifiedStepShortDescription(int index, String stepName){
+
+        String qualifiedName = (index + 1) + ". " + stepName;
+
+        return qualifiedName;
+
+    }
+
     private static List<Step> parseSteps(JSONArray stepsJSON, int recipe_id){
 
         List<Step> steps = new ArrayList<>();
@@ -102,9 +110,16 @@ public class RecipesUtils {
                 JSONObject stepJSON = stepsJSON.getJSONObject(i);
 
                 step.setIndex(stepJSON.getInt(id_token));
+
                 step.setDescription(stepJSON.getString(description_token));
-                step.setShortDescription(stepJSON.getString(short_description_token));
+
+                step.setShortDescription(
+                        getQualifiedStepShortDescription(
+                                step.getIndex(),
+                                stepJSON.getString(short_description_token)));
+
                 step.setThumbailURL(stepJSON.getString(thumbnail_url_token));
+
                 step.setVideoURL(stepJSON.getString(video_url_token));
 
                 step.setRecipeId(recipe_id);

@@ -15,6 +15,14 @@ public interface StepDAO {
     @Query("SELECT * FROM steps WHERE + recipeId = :recipe_index")
     List<Step> getSteps(int recipe_index);
 
+    @Query("SELECT shortDescription FROM steps WHERE + recipeId = :recipe_index")
+    List<String> getStepsShortDescription(int recipe_index);
+
+    @Query("SELECT `index` FROM steps WHERE + recipeId = :recipe_index")
+    List<Integer> getStepsIndex(int recipe_index);
+
+    @Query("SELECT * FROM steps WHERE + recipeId = :recipe_index AND `index` = :step_index")
+    Step getStep(int recipe_index, int step_index);
     @Insert
     void insertStep(Step step);
 }

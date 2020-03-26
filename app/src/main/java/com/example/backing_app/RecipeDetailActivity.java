@@ -6,32 +6,28 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.recipe.Ingredient;
-import com.example.backing_app.recipe.Step;
 import com.example.backing_app.ui.MasterListFragment;
 import com.example.backing_app.ui.RecipeFragment;
-import com.example.backing_app.ui.StepFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
     private RecipeDataBase mDatabase;
-
-    private List<Step> mSteps;
     private List<Ingredient> mIngredients;
+    private List<String> mStepsShortDescription;
+    private List<Integer> mStepsIndex;
+    private int orientation;
 
     private static final String TAG = RecipeDetailActivity.class.getSimpleName();
     @Override
@@ -47,82 +43,41 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         mDatabase = RecipeDataBase.getInstance(this);
 
+        orientation = getResources().getConfiguration().orientation;
+
         AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mSteps = mDatabase.stepDAO().getSteps(recipe_index);
                 mIngredients = mDatabase.ingredientDAO().getIngredients(recipe_index);
+                mStepsShortDescription = mDatabase.stepDAO().getStepsShortDescription(recipe_index);
+                mStepsIndex = mDatabase.stepDAO().getStepsIndex(recipe_index);
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        setUpFragments();
-                        //setupIngredients();
-                        //setUpSteps();
+                        populateUI();
                     }
                 });
             }
         });
     }
 
-    private void setUpFragments(){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        MasterListFragment masterListFragment = new MasterListFragment();
-
-        masterListFragment.setStepsList(mSteps); // this can be an step index
-
-        fragmentManager.beginTransaction().add(R.id.step_1,masterListFragment).commit();
-    }
-
-    private void setUpSteps(){
-
-        int orientation = getResources().getConfiguration().orientation;
-
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            StepFragment stepFragment = new StepFragment();
-            stepFragment.setShortDescription(mSteps.get(0).getShortDescription());
-            fragmentManager.beginTransaction().add(R.id.step_1, stepFragment).commit();
-        }
-    }
-
-
-    private TextView createIngredientsLabel(){
-
-        TextView ingredientsLabelTextView = new TextView(this);
-
-        ingredientsLabelTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
-
-        ingredientsLabelTextView.setTextSize(32);
-        ingredientsLabelTextView.setTypeface(Typeface.DEFAULT_BOLD);
-
-        ingredientsLabelTextView.setText(getString(R.string.ingredients_label));
-
-        return ingredientsLabelTextView;
+    private void populateUI(){
+        setupIngredients();
+        setupSteps();
     }
 
     private void setupIngredients(){
 
         //  We get the parent layout according to the screen orientation
-
-        int orientation = getResources().getConfiguration().orientation;
-
         ViewGroup ingredientsLinearLayout;
 
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            ingredientsLinearLayout = findViewById(R.id.ingredients_grid_layout);
+            ingredientsLinearLayout = findViewById(R.id.recipe_details_ingredients_grid_layout);
         } else {
-            ingredientsLinearLayout = findViewById(R.id.ingredients_linear_layout);
+            ingredientsLinearLayout = findViewById(R.id.recipe_details_ingredients_linear_layout);
         }
 
-
-        // Create section label
-        TextView ingredientsLabelTextView = createIngredientsLabel();
-
-        ingredientsLinearLayout.addView(ingredientsLabelTextView, ingredientsLinearLayout.getChildCount());
         // Create constrain layout per ingredient
 
         int ingredients_size = mIngredients.size();
@@ -149,13 +104,27 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
             ingredientLayout.setLayoutParams(l);
 
-            ingredientsLinearLayout.addView(ingredientLayout, ingredientsLinearLayout.getChildCount());
+            ingredientsLinearLayout.addView(ingredientLayout, ingredientsLinearLayout.getChildCount() );
+
         }
     }
 
-    private void setUpUI(){
+    private void setupSteps(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
+        MasterListFragment masterListFragment = new MasterListFragment();
 
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+            masterListFragment.setOrientation(LinearLayout.HORIZONTAL);
+        } else{
+            masterListFragment.setOrientation(LinearLayout.VERTICAL);
+        }
+
+        masterListFragment.setSpanCount(3);
+        masterListFragment.setStepsShortDescription(mStepsShortDescription); // this can be an step index
+        masterListFragment.setStepsIndex(mStepsIndex);
+
+        fragmentManager.beginTransaction().add(R.id.steps_frame_layout,masterListFragment).commit();
     }
 
 }

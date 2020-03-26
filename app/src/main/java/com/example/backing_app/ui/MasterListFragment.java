@@ -1,14 +1,12 @@
 package com.example.backing_app.ui;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,15 +20,33 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.It
 
     private static String TAG = MasterListFragment.class.getSimpleName();
 
-    private List<Step> mStepsList;
+    private static final String orientation_token = "orientation";
+    private static final String span_count_token = "span_count";
 
-    // Mandatory empty constructor
+    private List<String> mStepsShortDescription;
+    private List<Integer> mStepsIndex;
+    private int mOrientation;
+    private int mSpanCount;
+
+
     public MasterListFragment() {
 
     }
 
-    public void setStepsList(List<Step> stepsList) {
-        this.mStepsList = stepsList;
+    public void setOrientation(int orientation) {
+        this.mOrientation = orientation;
+    }
+
+    public void setSpanCount(int spanCount) {
+        this.mSpanCount = spanCount;
+    }
+
+    public void setStepsShortDescription(List<String> stepsShortDescription) {
+        this.mStepsShortDescription = stepsShortDescription;
+    }
+
+    public void setStepsIndex(List<Integer> stepsIndex) {
+        this.mStepsIndex = stepsIndex;
     }
 
     // Inflates the GridView of all AndroidMe images
@@ -38,36 +54,48 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.It
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        if(savedInstanceState != null){
+            mOrientation = savedInstanceState.getInt(orientation_token);
+            mSpanCount = savedInstanceState.getInt(span_count_token);
+        }
+
         final View rootView = inflater.inflate(R.layout.fragment_master_list, container, false);
 
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_list);
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1);
 
-        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+        gridLayoutManager.setOrientation(mOrientation);
+
+        gridLayoutManager.setSpanCount(mSpanCount);
 
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        MasterListAdapter mAdapter = new MasterListAdapter(getContext(), mStepsList,this);
+        MasterListAdapter mAdapter = new MasterListAdapter(mStepsShortDescription,this);
 
         recyclerView.setAdapter(mAdapter);
 
         return rootView;
     }
 
-    /*
-        RecyclerView mMovieGrid = findViewById(R.id.MovieRecyclerView);
-    GridLayoutManager gridLayoutManager = new GridLayoutManager(this, columns);
-    mMovieGrid.setLayoutManager(gridLayoutManager);
-    mAdapter = new MovieAdapter(this);
-    mMovieGrid.setAdapter(mAdapter);
-
-     */
     @Override
     public void onItemClick(int clickedItemIndex) {
 
-        // I set all the Fragments as I want //Video, instructions etc..
+        // Here I will call to an Activity containing 2 fragments
+        // A fragment for the video/image and a another for the description
 
-        Log.d(TAG,mStepsList.get(clickedItemIndex).getShortDescription());
+        // This is for the new Activity. Then it will load the step from the DB
+        // mStepsIndex.get(clickedItemIndex) ;
+
+        Log.d(TAG, mStepsShortDescription.get(clickedItemIndex));
+        Log.d(TAG, String.valueOf(mStepsIndex.get(clickedItemIndex)));
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+
+        outState.putInt(orientation_token, mOrientation);
+        outState.putInt(span_count_token, mSpanCount);
     }
 }

@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         AppExecutorUtils.getsInstance().networkIO().execute(new Runnable() {
             @Override
             public void run() {
-                mRecipes = mRecipeViewModel.getRecipes();
+                mRecipes = mRecipeViewModel.loadData();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

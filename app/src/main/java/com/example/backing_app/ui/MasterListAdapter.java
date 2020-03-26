@@ -17,16 +17,12 @@ import java.util.List;
 
 public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.FragmentHolder> {
 
-    private Context mContext;
-    private List<Step> mSteps;
+    private List<String> mSteps;
     private final ItemClickListener mItemClickListener;
 
     private static final String TAG = MasterListAdapter.class.getSimpleName();
 
-
-    public MasterListAdapter(Context context, List<Step> steps, ItemClickListener itemClickListener){
-        Log.d(TAG,"I CREATE");
-        mContext = context;
+    public MasterListAdapter(List<String> steps, ItemClickListener itemClickListener){
         mSteps = steps;
         mItemClickListener = itemClickListener;
     }
@@ -50,7 +46,7 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Fr
 
     @Override
     public void onBindViewHolder(@NonNull FragmentHolder holder, int position) {
-        holder.bind (mSteps.get(position).getShortDescription());
+        holder.bind (mSteps.get(position));
     }
 
     @Override
@@ -61,7 +57,6 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Fr
         return -1;
     }
 
-
     class FragmentHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private final TextView itemView;
@@ -70,14 +65,10 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Fr
             super(view);
             itemView = view.findViewById(R.id.step_short_description);
             itemView.setOnClickListener(this);
-            Log.d(TAG,"Create viewholder");
-
         }
-
 
         public void bind (String text){
             Log.d(TAG,text);
-
             itemView.setText(text);
         }
 
@@ -87,5 +78,4 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Fr
             mItemClickListener.onItemClick(pos);
         }
     }
-
 }
