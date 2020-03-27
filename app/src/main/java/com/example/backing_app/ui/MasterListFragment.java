@@ -1,7 +1,7 @@
 package com.example.backing_app.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.backing_app.R;
-import com.example.backing_app.recipe.Step;
+import com.example.backing_app.StepDetailActivity;
 
 import java.util.List;
 
@@ -23,10 +23,13 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.It
     private static final String orientation_token = "orientation";
     private static final String span_count_token = "span_count";
 
+    public static final String STEP_INDEX_KEY = "step_index";
+    public static final String RECIPE_INDEX_KEY = "recipe_index";
+
     private List<String> mStepsShortDescription;
-    private List<Integer> mStepsIndex;
     private int mOrientation;
     private int mSpanCount;
+    private int mRecipeIndex;
 
 
     public MasterListFragment() {
@@ -45,11 +48,11 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.It
         this.mStepsShortDescription = stepsShortDescription;
     }
 
-    public void setStepsIndex(List<Integer> stepsIndex) {
-        this.mStepsIndex = stepsIndex;
+    public void setRecipeIndex(int recipeIndex) {
+        this.mRecipeIndex = recipeIndex;
     }
 
-    // Inflates the GridView of all AndroidMe images
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -86,10 +89,14 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.It
         // A fragment for the video/image and a another for the description
 
         // This is for the new Activity. Then it will load the step from the DB
-        // mStepsIndex.get(clickedItemIndex) ;
+        // mStepsIndex.get(clickedItemIndex);
 
-        Log.d(TAG, mStepsShortDescription.get(clickedItemIndex));
-        Log.d(TAG, String.valueOf(mStepsIndex.get(clickedItemIndex)));
+        Intent intent = new Intent(getActivity(), StepDetailActivity.class);
+
+        intent.putExtra(STEP_INDEX_KEY, clickedItemIndex);
+        intent.putExtra(RECIPE_INDEX_KEY, mRecipeIndex);
+        startActivity(intent);
+
     }
 
     @Override

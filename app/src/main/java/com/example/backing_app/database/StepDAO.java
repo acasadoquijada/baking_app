@@ -23,6 +23,7 @@ public interface StepDAO {
 
     @Query("SELECT * FROM steps WHERE + recipeId = :recipe_index AND `index` = :step_index")
     Step getStep(int recipe_index, int step_index);
+
     @Insert
     void insertStep(Step step);
 }

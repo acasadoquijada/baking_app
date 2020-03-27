@@ -26,8 +26,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private RecipeDataBase mDatabase;
     private List<Ingredient> mIngredients;
     private List<String> mStepsShortDescription;
-    private List<Integer> mStepsIndex;
     private int orientation;
+    private int recipe_index;
 
     private static final String TAG = RecipeDetailActivity.class.getSimpleName();
     @Override
@@ -39,7 +39,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         intent = getIntent();
 
-        final int recipe_index = intent.getIntExtra(RecipeFragment.RECIPE_TOKEN_ID,0);
+        recipe_index = intent.getIntExtra(RecipeFragment.RECIPE_TOKEN_ID,0);
 
         mDatabase = RecipeDataBase.getInstance(this);
 
@@ -50,8 +50,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
             public void run() {
                 mIngredients = mDatabase.ingredientDAO().getIngredients(recipe_index);
                 mStepsShortDescription = mDatabase.stepDAO().getStepsShortDescription(recipe_index);
-                mStepsIndex = mDatabase.stepDAO().getStepsIndex(recipe_index);
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -122,7 +120,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         masterListFragment.setSpanCount(3);
         masterListFragment.setStepsShortDescription(mStepsShortDescription); // this can be an step index
-        masterListFragment.setStepsIndex(mStepsIndex);
+        masterListFragment.setRecipeIndex(recipe_index);
 
         fragmentManager.beginTransaction().add(R.id.steps_frame_layout,masterListFragment).commit();
     }

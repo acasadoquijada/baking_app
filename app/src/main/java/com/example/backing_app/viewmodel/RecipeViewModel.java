@@ -12,6 +12,7 @@ import androidx.room.Room;
 
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.recipe.Recipe;
+import com.example.backing_app.recipe.Step;
 import com.example.backing_app.utils.AppExecutorUtils;
 import com.example.backing_app.utils.RecipesUtils;
 
