@@ -20,6 +20,12 @@ public interface RecipeDAO {
     @Query("SELECT * FROM recipes WHERE + recipes.id = :recipe_id ")
     Recipe getRecipe(int recipe_id);
 
+    @Query("SELECT name FROM recipes")
+    List<String> getRecipesName();
+
+    @Query("SELECT servings FROM recipes")
+    List<String> getRecipesServing();
+
     @Insert
     void insertRecipe(Recipe recipe);
 

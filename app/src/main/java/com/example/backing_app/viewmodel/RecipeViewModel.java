@@ -6,14 +6,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
-import androidx.room.Room;
 
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.recipe.Recipe;
-import com.example.backing_app.recipe.Step;
-import com.example.backing_app.utils.AppExecutorUtils;
 import com.example.backing_app.utils.RecipesUtils;
 
 import java.util.List;
@@ -30,9 +25,8 @@ public class RecipeViewModel extends AndroidViewModel {
         Log.d(TAG,"I CREATE");
     }
 
-    public List<Recipe> loadData(){
+    public void loadData(){
 
-        String s = "AA";
         if(mRecipes == null){
 
             mRecipes = mDatabase.recipeDAO().getRecipes();
@@ -64,6 +58,5 @@ public class RecipeViewModel extends AndroidViewModel {
 
             }
         }
-        return mRecipes;
     }
 }

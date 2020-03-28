@@ -3,37 +3,10 @@
 <ScrollView android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent">
 
-<LinearLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:id="@+id/main_linear_layout"
-    tools:context=".MainActivity">
-
     <FrameLayout
+        android:id="@+id/recipes_frame_layout"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:scaleType="centerInside"
-        android:id="@+id/recipe_1"/>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:scaleType="centerInside"
-        android:id="@+id/recipe_2"/>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:scaleType="centerInside"
-        android:id="@+id/recipe_3"/>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:scaleType="centerInside"
-        android:id="@+id/recipe_4"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"/>
 </ScrollView>

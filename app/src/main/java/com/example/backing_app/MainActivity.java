@@ -3,25 +3,27 @@ package com.example.backing_app;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.widget.LinearLayout;
 
-import com.example.backing_app.adapter.RecipeAdapter;
+import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.recipe.Recipe;
-import com.example.backing_app.ui.MasterListAdapter;
-import com.example.backing_app.ui.RecipeFragment;
+import com.example.backing_app.ui.RecipeListFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
 import com.example.backing_app.viewmodel.RecipeViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements RecipeAdapter.ItemClickListener{
+public class MainActivity extends AppCompatActivity {
 
-    public List<Recipe> mRecipes;
+    public List<String> mRecipesName;
+    public List<String> mRecipesServing;
     private RecipeViewModel mRecipeViewModel;
+    int orientation;
+
+    private RecipeDataBase mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +32,17 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Ite
 
         mRecipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
 
+        orientation = getResources().getConfiguration().orientation;
+
+        mDatabase = RecipeDataBase.getInstance(this);
+
         AppExecutorUtils.getsInstance().networkIO().execute(new Runnable() {
             @Override
             public void run() {
-                mRecipes = mRecipeViewModel.loadData();
+                mRecipeViewModel.loadData();
+                mRecipesName = mDatabase.recipeDAO().getRecipesName();
+                mRecipesServing = mDatabase.recipeDAO().getRecipesServing();
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -49,6 +58,24 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Ite
      * Creates all the RecipeFragment needed for the recipes
      */
 
+    private void populateUI(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        RecipeListFragment recipeListFragment = new RecipeListFragment();
+
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+            recipeListFragment.setSpanCount(2);
+        } else{
+            recipeListFragment.setSpanCount(1);
+        }
+
+        recipeListFragment.setOrientation(LinearLayout.VERTICAL);
+        recipeListFragment.setRecipesName(mRecipesName);
+        recipeListFragment.setRecipesServing(mRecipesServing);
+
+        fragmentManager.beginTransaction().add(R.id.recipes_frame_layout,recipeListFragment).commit();
+    }
+    /*
     private void populateUI() {
 
         if (mRecipes.size() > 0) {
@@ -72,10 +99,5 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Ite
                 fragmentManager.beginTransaction().add(ids.get(i), r).commit();
             }
         }
-    }
-
-    @Override
-    public void onItemClick(int clickedItemIndex) {
-
-    }
+    }*/
 }

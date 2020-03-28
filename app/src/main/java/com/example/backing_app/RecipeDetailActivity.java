@@ -1,23 +1,18 @@
 package com.example.backing_app;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.recipe.Ingredient;
 import com.example.backing_app.ui.IngredientFragment;
 import com.example.backing_app.ui.MasterListFragment;
-import com.example.backing_app.ui.RecipeFragment;
+import com.example.backing_app.ui.RecipeListFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
 
 import java.util.List;
@@ -40,7 +35,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         intent = getIntent();
 
-        recipe_index = intent.getIntExtra(RecipeFragment.RECIPE_TOKEN_ID,0);
+        recipe_index = intent.getIntExtra(RecipeListFragment.RECIPE_ID_KEY,0);
 
         mDatabase = RecipeDataBase.getInstance(this);
 
