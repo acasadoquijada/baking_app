@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.backing_app.R;
-import com.example.backing_app.recipe.Step;
 
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Fr
         Context context = parent.getContext();
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        int layoutIdForListItem = R.layout.step_view;
+        int layoutIdForListItem = R.layout.step_layout;
 
         View view = inflater.inflate(layoutIdForListItem, parent, false);
 

@@ -16,15 +16,12 @@
             android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
             android:text="@string/ingredients_label"/>
-<LinearLayout
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginStart="8dp"
-    tools:context=".RecipeDetailActivity"
-    android:id="@+id/recipe_details_ingredients_linear_layout">
-</LinearLayout>
+
+        <FrameLayout
+            android:layout_marginBottom="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/ingredients_frame_layout"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -40,6 +37,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/steps_frame_layout"/>
-
     </LinearLayout>
 </ScrollView>

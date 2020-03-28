@@ -1,39 +1,36 @@
 package com.example.backing_app.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.backing_app.R;
-import com.example.backing_app.StepDetailActivity;
+import com.example.backing_app.recipe.Ingredient;
 
 import java.util.List;
 
-public class MasterListFragment extends Fragment implements MasterListAdapter.ItemClickListener {
-
-    private static String TAG = MasterListFragment.class.getSimpleName();
+public class IngredientFragment extends Fragment {
 
     private static final String orientation_token = "orientation";
     private static final String span_count_token = "span_count";
 
-    public static final String STEP_INDEX_KEY = "step_index";
-    public static final String RECIPE_INDEX_KEY = "recipe_index";
-
-    private List<String> mStepsShortDescription;
+    private List<Ingredient> mIngredient;
     private int mOrientation;
     private int mSpanCount;
-    private int mRecipeIndex;
 
+    public IngredientFragment(){
 
-    public MasterListFragment() {
+    }
 
+    public void setIngredients(List<Ingredient> ingredients){
+        mIngredient = ingredients;
     }
 
     public void setOrientation(int orientation) {
@@ -44,18 +41,9 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.It
         this.mSpanCount = spanCount;
     }
 
-    public void setStepsShortDescription(List<String> stepsShortDescription) {
-        this.mStepsShortDescription = stepsShortDescription;
-    }
-
-    public void setRecipeIndex(int recipeIndex) {
-        this.mRecipeIndex = recipeIndex;
-    }
-
-
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if(savedInstanceState != null){
             mOrientation = savedInstanceState.getInt(orientation_token);
@@ -63,7 +51,6 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.It
         }
 
         final View rootView = inflater.inflate(R.layout.fragment_master_list, container, false);
-
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_list);
 
@@ -73,33 +60,15 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.It
 
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        MasterListAdapter mAdapter = new MasterListAdapter(mStepsShortDescription,this);
+        IngredientListAdapter ingredientListAdapter = new IngredientListAdapter(mIngredient);
 
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(ingredientListAdapter);
 
         return rootView;
     }
 
     @Override
-    public void onItemClick(int clickedItemIndex) {
-
-        // Here I will call to an Activity containing 2 fragments
-        // A fragment for the video/image and a another for the description
-
-        // This is for the new Activity. Then it will load the step from the DB
-        // mStepsIndex.get(clickedItemIndex);
-
-        Intent intent = new Intent(getActivity(), StepDetailActivity.class);
-
-        intent.putExtra(STEP_INDEX_KEY, clickedItemIndex);
-        intent.putExtra(RECIPE_INDEX_KEY, mRecipeIndex);
-        startActivity(intent);
-
-    }
-
-    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-
         outState.putInt(orientation_token, mOrientation);
         outState.putInt(span_count_token, mSpanCount);
     }

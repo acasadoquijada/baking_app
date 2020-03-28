@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.recipe.Ingredient;
+import com.example.backing_app.ui.IngredientFragment;
 import com.example.backing_app.ui.MasterListFragment;
 import com.example.backing_app.ui.RecipeFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
@@ -61,68 +62,48 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
 
     private void populateUI(){
-        setupIngredients();
+        setupIngredientsNew();
         setupSteps();
     }
 
-    private void setupIngredients(){
+    private void setupIngredientsNew(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
-        //  We get the parent layout according to the screen orientation
-        ViewGroup ingredientsLinearLayout;
 
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            ingredientsLinearLayout = findViewById(R.id.recipe_details_ingredients_grid_layout);
-        } else {
-            ingredientsLinearLayout = findViewById(R.id.recipe_details_ingredients_linear_layout);
-        }
 
-        // Create constrain layout per ingredient
 
-        int ingredients_size = mIngredients.size();
-
-        for(int i = 0; i < ingredients_size; i++){
-
-            LayoutInflater inflater = LayoutInflater.from(this);
-
-            View ingredientLayout = inflater.inflate(R.layout.ingredient_layout, null);
-
-            TextView textView = ingredientLayout.findViewById(R.id.ingredient_name);
-            TextView textView2 = ingredientLayout.findViewById(R.id.ingredient_measure);
-            TextView textView3 = ingredientLayout.findViewById(R.id.ingredient_quantity);
-
-            String bullet_point = "\u2022";
-
-            textView.append(bullet_point + " " + mIngredients.get(i).getIngredientName());
-            textView2.setText(mIngredients.get(i).getMeasure());
-            textView3.setText(String.valueOf(mIngredients.get(i).getQuantity()));
-
-            ConstraintLayout.LayoutParams l = new ConstraintLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            ingredientLayout.setLayoutParams(l);
-
-            ingredientsLinearLayout.addView(ingredientLayout, ingredientsLinearLayout.getChildCount() );
-
-        }
     }
 
     private void setupSteps(){
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         MasterListFragment masterListFragment = new MasterListFragment();
+        IngredientFragment ingredientFragment = new IngredientFragment();
+
 
         if(orientation == Configuration.ORIENTATION_LANDSCAPE){
             masterListFragment.setOrientation(LinearLayout.HORIZONTAL);
+            ingredientFragment.setOrientation(LinearLayout.HORIZONTAL);
+
+            masterListFragment.setSpanCount(3);
+            ingredientFragment.setSpanCount(3);
         } else{
             masterListFragment.setOrientation(LinearLayout.VERTICAL);
+            ingredientFragment.setOrientation(LinearLayout.VERTICAL);
+
+            masterListFragment.setSpanCount(1);
+            ingredientFragment.setSpanCount(1);
+
         }
 
-        masterListFragment.setSpanCount(3);
-        masterListFragment.setStepsShortDescription(mStepsShortDescription); // this can be an step index
+        masterListFragment.setStepsShortDescription(mStepsShortDescription);
         masterListFragment.setRecipeIndex(recipe_index);
 
+        ingredientFragment.setIngredients(mIngredients);
+
+        fragmentManager.beginTransaction().add(R.id.ingredients_frame_layout,ingredientFragment).commit();
         fragmentManager.beginTransaction().add(R.id.steps_frame_layout,masterListFragment).commit();
+
     }
 
 }

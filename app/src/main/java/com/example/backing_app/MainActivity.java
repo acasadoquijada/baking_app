@@ -3,10 +3,14 @@ package com.example.backing_app;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.example.backing_app.adapter.RecipeAdapter;
 import com.example.backing_app.recipe.Recipe;
+import com.example.backing_app.ui.MasterListAdapter;
 import com.example.backing_app.ui.RecipeFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
 import com.example.backing_app.viewmodel.RecipeViewModel;
@@ -14,7 +18,7 @@ import com.example.backing_app.viewmodel.RecipeViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecipeAdapter.ItemClickListener{
 
     public List<Recipe> mRecipes;
     private RecipeViewModel mRecipeViewModel;
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                       // populateUINew();
                         populateUI();
                     }
                 });
@@ -67,5 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction().add(ids.get(i), r).commit();
             }
         }
+    }
+
+    @Override
+    public void onItemClick(int clickedItemIndex) {
+
     }
 }
