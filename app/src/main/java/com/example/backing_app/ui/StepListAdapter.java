@@ -14,14 +14,14 @@ import com.example.backing_app.R;
 
 import java.util.List;
 
-public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.FragmentHolder> {
+public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.FragmentHolder> {
 
     private List<String> mSteps;
     private final ItemClickListener mItemClickListener;
 
-    private static final String TAG = MasterListAdapter.class.getSimpleName();
+    private static final String TAG = StepListAdapter.class.getSimpleName();
 
-    public MasterListAdapter(List<String> steps, ItemClickListener itemClickListener){
+    public StepListAdapter(List<String> steps, ItemClickListener itemClickListener){
         mSteps = steps;
         mItemClickListener = itemClickListener;
     }
@@ -66,7 +66,7 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Fr
             itemView.setOnClickListener(this);
         }
 
-        public void bind (String text){
+        void bind (String text){
             Log.d(TAG,text);
             itemView.setText(text);
         }

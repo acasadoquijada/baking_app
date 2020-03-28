@@ -16,9 +16,9 @@ import com.example.backing_app.StepDetailActivity;
 
 import java.util.List;
 
-public class MasterListFragment extends Fragment implements MasterListAdapter.ItemClickListener {
+public class StepListFragment extends Fragment implements StepListAdapter.ItemClickListener {
 
-    private static String TAG = MasterListFragment.class.getSimpleName();
+    private static String TAG = StepListFragment.class.getSimpleName();
 
     private static final String orientation_token = "orientation";
     private static final String span_count_token = "span_count";
@@ -32,7 +32,7 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.It
     private int mRecipeIndex;
 
 
-    public MasterListFragment() {
+    public StepListFragment() {
 
     }
 
@@ -65,7 +65,7 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.It
         final View rootView = inflater.inflate(R.layout.fragment_master_list, container, false);
 
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_list);
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.step_list);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), mSpanCount);
 
@@ -73,7 +73,7 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.It
 
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        MasterListAdapter mAdapter = new MasterListAdapter(mStepsShortDescription,this);
+        StepListAdapter mAdapter = new StepListAdapter(mStepsShortDescription,this);
 
         recyclerView.setAdapter(mAdapter);
 

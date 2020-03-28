@@ -6,11 +6,10 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.recipe.Step;
-import com.example.backing_app.ui.MasterListFragment;
+import com.example.backing_app.ui.StepListFragment;
 import com.example.backing_app.ui.VideoFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
 
@@ -31,8 +30,8 @@ public class StepDetailActivity extends AppCompatActivity {
 
         intent = getIntent();
 
-        recipe_index = intent.getIntExtra(MasterListFragment.RECIPE_INDEX_KEY,0);
-        step_index = intent.getIntExtra(MasterListFragment.STEP_INDEX_KEY,0);
+        recipe_index = intent.getIntExtra(StepListFragment.RECIPE_INDEX_KEY,0);
+        step_index = intent.getIntExtra(StepListFragment.STEP_INDEX_KEY,0);
 
         final RecipeDataBase mDatabase = RecipeDataBase.getInstance(this);
 

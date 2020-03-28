@@ -52,7 +52,7 @@ public class IngredientFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_master_list, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_list);
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.step_list);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), mSpanCount);
 

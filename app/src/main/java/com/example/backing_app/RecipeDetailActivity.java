@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.recipe.Ingredient;
 import com.example.backing_app.ui.IngredientFragment;
-import com.example.backing_app.ui.MasterListFragment;
+import com.example.backing_app.ui.StepListFragment;
 import com.example.backing_app.ui.RecipeListFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
 
@@ -72,32 +72,32 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private void setupSteps(){
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        MasterListFragment masterListFragment = new MasterListFragment();
+        StepListFragment stepListFragment = new StepListFragment();
         IngredientFragment ingredientFragment = new IngredientFragment();
 
 
         if(orientation == Configuration.ORIENTATION_LANDSCAPE){
-            masterListFragment.setOrientation(LinearLayout.HORIZONTAL);
+            stepListFragment.setOrientation(LinearLayout.HORIZONTAL);
             ingredientFragment.setOrientation(LinearLayout.HORIZONTAL);
 
-            masterListFragment.setSpanCount(3);
+            stepListFragment.setSpanCount(3);
             ingredientFragment.setSpanCount(3);
         } else{
-            masterListFragment.setOrientation(LinearLayout.VERTICAL);
+            stepListFragment.setOrientation(LinearLayout.VERTICAL);
             ingredientFragment.setOrientation(LinearLayout.VERTICAL);
 
-            masterListFragment.setSpanCount(1);
+            stepListFragment.setSpanCount(1);
             ingredientFragment.setSpanCount(1);
 
         }
 
-        masterListFragment.setStepsShortDescription(mStepsShortDescription);
-        masterListFragment.setRecipeIndex(recipe_index);
+        stepListFragment.setStepsShortDescription(mStepsShortDescription);
+        stepListFragment.setRecipeIndex(recipe_index);
 
         ingredientFragment.setIngredients(mIngredients);
 
         fragmentManager.beginTransaction().add(R.id.ingredients_frame_layout,ingredientFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.steps_frame_layout,masterListFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.steps_frame_layout, stepListFragment).commit();
 
     }
 
