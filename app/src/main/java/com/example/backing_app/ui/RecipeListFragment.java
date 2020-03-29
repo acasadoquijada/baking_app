@@ -58,7 +58,7 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
             mSpanCount = savedInstanceState.getInt(span_count_token);
         }
 
-        final View rootView = inflater.inflate(R.layout.recipe_list, container, false);
+        final View rootView = inflater.inflate(R.layout.recipe_list_layout, container, false);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recipe_list);
 

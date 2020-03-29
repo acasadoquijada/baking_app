@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.example.backing_app.database.RecipeDataBase;
@@ -17,6 +18,8 @@ import com.example.backing_app.viewmodel.RecipeViewModel;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     public List<String> mRecipesName;
     public List<String> mRecipesServing;
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.d(TAG, "I CREATE");
         mRecipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
 
         orientation = getResources().getConfiguration().orientation;
@@ -46,12 +50,14 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                       // populateUINew();
-                        populateUI();
+                        // populateUINew();
+                         populateUI();
                     }
                 });
             }
         });
+
+
     }
 
     /**
@@ -59,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
      */
 
     private void populateUI(){
+
+
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         RecipeListFragment recipeListFragment = new RecipeListFragment();

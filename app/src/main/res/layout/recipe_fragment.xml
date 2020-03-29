@@ -29,7 +29,7 @@
             android:layout_height="match_parent"
             android:textSize="24sp"
             android:textColor="@color/white"
-            android:padding="16dp"
+            android:paddingBottom="32dp"
             android:textStyle="normal"/>
 
     </LinearLayout>

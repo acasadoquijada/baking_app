@@ -1,11 +1,15 @@
 package com.example.backing_app;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.example.backing_app.database.RecipeDataBase;
@@ -31,11 +35,18 @@ public class RecipeDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
+        ActionBar actionBar = this.getSupportActionBar();
+
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+
         Intent intent;
 
         intent = getIntent();
 
-        recipe_index = intent.getIntExtra(RecipeListFragment.RECIPE_ID_KEY,0);
+        recipe_index = intent.getIntExtra(RecipeListFragment.RECIPE_ID_KEY, 0);
 
         mDatabase = RecipeDataBase.getInstance(this);
 
@@ -54,6 +65,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 });
             }
         });
+
     }
 
     private void populateUI(){
@@ -99,6 +111,17 @@ public class RecipeDetailActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().add(R.id.ingredients_frame_layout,ingredientFragment).commit();
         fragmentManager.beginTransaction().add(R.id.steps_frame_layout, stepListFragment).commit();
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == android.R.id.home){
+            NavUtils.navigateUpFromSameTask(this);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

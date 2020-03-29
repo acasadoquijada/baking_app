@@ -1,23 +1,37 @@
 package com.example.backing_app;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.recipe.Step;
+import com.example.backing_app.ui.StepInstructionFragment;
 import com.example.backing_app.ui.StepListFragment;
 import com.example.backing_app.ui.VideoFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
 
+import static com.example.backing_app.ui.StepListFragment.RECIPE_INDEX_KEY;
+import static com.example.backing_app.ui.StepListFragment.STEP_INDEX_KEY;
+
 public class StepDetailActivity extends AppCompatActivity {
 
-    private int recipe_index;
-    private int step_index;
+    private int mRecipeIndex;
+    private int mStepIndex;
     private Step step;
+    private RecipeDataBase mDatabase;
+    private VideoFragment mVideoFragment;
+    private StepInstructionFragment mStepInstructionFragment;
 
     private static String TAG = StepDetailActivity.class.getSimpleName();
 
@@ -26,61 +40,151 @@ public class StepDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
 
-        Intent intent;
+        // Create only new fragments when no previous instance saved
+        if(savedInstanceState == null){
 
-        intent = getIntent();
+            ActionBar actionBar = this.getSupportActionBar();
 
-        recipe_index = intent.getIntExtra(StepListFragment.RECIPE_INDEX_KEY,0);
-        step_index = intent.getIntExtra(StepListFragment.STEP_INDEX_KEY,0);
-
-        final RecipeDataBase mDatabase = RecipeDataBase.getInstance(this);
-
-        AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                step = mDatabase.stepDAO().getStep(recipe_index,step_index);
-                Log.d(TAG,step.getShortDescription());
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        populateUI();
-                    }
-                });
+            if(actionBar != null){
+                actionBar.setDisplayHomeAsUpEnabled(true);
             }
-        });
+
+            Button button = findViewById(R.id.next_button);
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    nextStep();
+                }
+            });
+
+            Button button1 = findViewById(R.id.previous_button);
+
+            button1.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    previousStep();
+                }
+            });
+
+            Intent intent;
+
+            intent = getIntent();
+
+            mRecipeIndex = intent.getIntExtra(RECIPE_INDEX_KEY,0);
+            mStepIndex = intent.getIntExtra(STEP_INDEX_KEY,0);
+
+            mDatabase = RecipeDataBase.getInstance(this);
+
+            AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    step = mDatabase.stepDAO().getStep(mRecipeIndex, mStepIndex);
+                    Log.d(TAG,step.getShortDescription());
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            populateUI();
+                        }
+                    });
+                }
+            });
+
+        }
     }
 
     private void populateUI(){
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        VideoFragment videoFragment = new VideoFragment();
+        mVideoFragment = new VideoFragment();
 
         if(!step.getVideoURL().equals("")){
-            videoFragment.setMediaURL(step.getVideoURL());
+            mVideoFragment.setMediaURL(step.getVideoURL());
         } else if(!step.getThumbailURL().equals("")){
-            videoFragment.setMediaURL(step.getThumbailURL());
+            mVideoFragment.setMediaURL(step.getThumbailURL());
         } else {
-            videoFragment.setMediaURL(getString(R.string.step_no_video));
+            mVideoFragment.setMediaURL(getString(R.string.step_no_video));
         }
 
-        fragmentManager.beginTransaction().add(R.id.video_frame_layout,videoFragment).commit();
+        mStepInstructionFragment = new StepInstructionFragment();
 
+        mStepInstructionFragment.setStepInstruction(step.getDescription());
 
+        fragmentManager.beginTransaction().add(R.id.video_frame_layout,mVideoFragment).commit();
 
-        /*
-        TextView text1 = findViewById(R.id.step_detail_video);
-        TextView text2 = findViewById(R.id.step_detail_instruction);
+        fragmentManager.beginTransaction().add(
+                R.id.step_description_frame_layout,
+                mStepInstructionFragment).commit();
+    }
 
-        if(!step.getVideoURL().equals("")){
-            text1.setText(step.getVideoURL());
-        } else if(!step.getThumbailURL().equals("")){
-            text1.setText(step.getThumbailURL());
+    private void previousStep(){
+
+        // We know steps start at index 0, so we take advantage of this
+        final int previousStepIndex = mStepIndex - 1;
+
+        Log.d(TAG,"Previous step index " + previousStepIndex);
+
+        if(previousStepIndex >= 0){
+            Intent intent = new Intent(getApplicationContext(), StepDetailActivity.class);
+
+            intent.putExtra(STEP_INDEX_KEY, previousStepIndex);
+            intent.putExtra(RECIPE_INDEX_KEY, mRecipeIndex);
+            startActivity(intent);
         } else {
-            text1.setText(R.string.step_no_video);
+            Toast.makeText(
+                    StepDetailActivity.this,
+                    "This is the first step. No previous steps",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void nextStep(){
+        AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                final int nextStepIndex = mStepIndex + 1;
+
+                Step s = mDatabase.stepDAO().getStep(mRecipeIndex, nextStepIndex);
+
+                if (s != null) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(getApplicationContext(), StepDetailActivity.class);
+
+                            intent.putExtra(STEP_INDEX_KEY, nextStepIndex);
+                            intent.putExtra(RECIPE_INDEX_KEY, mRecipeIndex);
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Make toast, no more steps
+                            Toast.makeText(
+                                    StepDetailActivity.this,
+                                    "This is the last step. No more steps",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == android.R.id.home){
+            NavUtils.navigateUpFromSameTask(this);
         }
 
-        text2.setText(step.getDescription());*/
-
+        return super.onOptionsItemSelected(item);
     }
 }

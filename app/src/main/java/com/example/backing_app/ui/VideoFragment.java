@@ -3,7 +3,6 @@ package com.example.backing_app.ui;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,7 +61,7 @@ public class VideoFragment extends Fragment {
 
 
         //        Log.d(TAG,mMediaURL);
-        View rootView = inflater.inflate(R.layout.fragment_video,container,false);
+        View rootView = inflater.inflate(R.layout.video_fragment,container,false);
 
         mSimpleExoPlayerView = rootView.findViewById(R.id.fragment_video_player_view);
 
@@ -86,7 +85,7 @@ public class VideoFragment extends Fragment {
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(),trackSelector,loadControl);
             mSimpleExoPlayerView.setPlayer(mExoPlayer);
 
-            mMediaURL = "https://finofilipino.org/wp-content/uploads/2020/03/qwerqwerfwqertg3.mp4";
+//            mMediaURL = "https://finofilipino.org/wp-content/uploads/2020/03/qwerqwerfwqertg3.mp4";
 
             if(mMediaURL.equals(getString(R.string.step_no_video))) {
                 mSimpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource

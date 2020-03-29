@@ -28,7 +28,7 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
         Context context = parent.getContext();
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        int layoutIdForListItem = R.layout.ingredient_layout;
+        int layoutIdForListItem = R.layout.ingredient_fragment;
 
         View view = inflater.inflate(layoutIdForListItem, parent, false);
 

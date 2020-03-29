@@ -50,7 +50,7 @@ public class IngredientFragment extends Fragment {
             mSpanCount = savedInstanceState.getInt(span_count_token);
         }
 
-        final View rootView = inflater.inflate(R.layout.fragment_master_list, container, false);
+        final View rootView = inflater.inflate(R.layout.step_list_layout, container, false);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.step_list);
 

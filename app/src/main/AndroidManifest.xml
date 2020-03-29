@@ -12,12 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".StepDetailActivity"
-            android:launchMode="singleTop">
+            android:parentActivityName=".RecipeDetailActivity">
 
         </activity>
         <activity
             android:name=".RecipeDetailActivity"
-            android:launchMode="singleTop" />
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop">

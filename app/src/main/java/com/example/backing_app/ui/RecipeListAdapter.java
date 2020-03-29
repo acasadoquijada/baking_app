@@ -1,7 +1,6 @@
 package com.example.backing_app.ui;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.backing_app.R;
-import com.example.backing_app.recipe.Recipe;
 
 
 import java.util.List;
@@ -36,7 +34,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         Context context = parent.getContext();
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        int layoutIdForListItem = R.layout.fragment_recipe;
+        int layoutIdForListItem = R.layout.recipe_fragment;
 
         View view = inflater.inflate(layoutIdForListItem, parent, false);
 
@@ -45,7 +43,13 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     @Override
     public void onBindViewHolder(@NonNull RecipeHolder holder, int position) {
-        holder.bind (mRecipesName.get(position), mRecipesServing.get(position));
+
+        String prefix = holder.itemView.getContext().getString(R.string.serving_prefix);
+        String suffix = holder.itemView.getContext().getString(R.string.serving_suffix);
+
+        String serving = prefix + " " + mRecipesServing.get(position) + " " + suffix;
+
+        holder.bind (mRecipesName.get(position), serving);
     }
 
     @Override

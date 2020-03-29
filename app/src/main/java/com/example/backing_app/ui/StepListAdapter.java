@@ -36,7 +36,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.Fragme
         Context context = parent.getContext();
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        int layoutIdForListItem = R.layout.step_layout;
+        int layoutIdForListItem = R.layout.step_fragment;
 
         View view = inflater.inflate(layoutIdForListItem, parent, false);
 
@@ -63,7 +63,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.Fragme
         FragmentHolder(@NonNull View view) {
             super(view);
             itemView = view.findViewById(R.id.step_short_description);
-            itemView.setOnClickListener(this);
+            view.setOnClickListener(this);
         }
 
         void bind (String text){
