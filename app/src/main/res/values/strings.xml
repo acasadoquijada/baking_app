@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Backing Time</string>
+    <string name="app_name">Baking Time</string>
     <string name="serving_prefix">Recipe for</string>
     <string name="serving_suffix">people</string>
     <string name="ingredients_label">Ingredients</string>
