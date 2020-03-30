@@ -11,7 +11,9 @@ The user is able to navigate the app selecting the desired recipe and its differ
 TO-DO: Application organization and add some screenshots
 
 
-## Logo
+## External resources
+
+The image shown where a step doesn't contain a video was obatined from https://videomembertheme.szablonstrony.pl/wp-content/themes/videomembertheme/images/novideo.png
 
 The logos shown in the RecipeDetail Activy are the follwing:
 

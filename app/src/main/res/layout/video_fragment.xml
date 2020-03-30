@@ -4,4 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/no_video_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/no_video"
+        android:visibility="invisible"/>
+
 </com.google.android.exoplayer2.ui.SimpleExoPlayerView>

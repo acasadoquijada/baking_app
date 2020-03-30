@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -66,7 +67,14 @@ public class VideoFragment extends Fragment {
 
         mSimpleExoPlayerView = rootView.findViewById(R.id.fragment_video_player_view);
 
-        initializePlayer();
+        // If no video, no player
+
+        if(mMediaURL.equals(getString(R.string.step_no_video))) {
+            ImageView image = rootView.findViewById(R.id.no_video_image);
+            image.setVisibility(View.VISIBLE);
+        } else{
+            initializePlayer();
+        }
 
         return rootView;
     }
@@ -85,13 +93,6 @@ public class VideoFragment extends Fragment {
 
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(),trackSelector,loadControl);
             mSimpleExoPlayerView.setPlayer(mExoPlayer);
-
-            // If no video, the mExoPlayer background shows a image letting the user know about this
-
-            if(mMediaURL.equals(getString(R.string.step_no_video))) {
-                mSimpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
-                        (getResources(), R.drawable.no_video));
-            }
 
             mSimpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
             mExoPlayer.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
@@ -130,8 +131,10 @@ public class VideoFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        mPos = Math.max(0, mExoPlayer.getCurrentPosition());
-        mReady = mExoPlayer.getPlayWhenReady();
+        if(mExoPlayer != null){
+            mPos = Math.max(0, mExoPlayer.getCurrentPosition());
+            mReady = mExoPlayer.getPlayWhenReady();
+        }
         releasePlayer();
     }
 }
