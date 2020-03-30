@@ -1,4 +1,4 @@
-package com.example.backing_app.ui;
+package com.example.backing_app.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,7 +16,11 @@ import com.example.backing_app.recipe.Ingredient;
 
 import java.util.List;
 
-public class IngredientFragment extends Fragment {
+/**
+ * This Fragment class is in charge of representing the ingredients in the RecipeDetailActivity
+ * */
+
+public class IngredientListFragment extends Fragment {
 
     private static final String orientation_token = "orientation";
     private static final String span_count_token = "span_count";
@@ -25,7 +29,7 @@ public class IngredientFragment extends Fragment {
     private int mOrientation;
     private int mSpanCount;
 
-    public IngredientFragment(){
+    public IngredientListFragment(){
 
     }
 
@@ -40,6 +44,16 @@ public class IngredientFragment extends Fragment {
     public void setSpanCount(int spanCount) {
         this.mSpanCount = spanCount;
     }
+
+    /**
+     * A RecyclerView is created and populated with the ingredients information. For this task, a
+     * RecipeListAdapter is used
+     *
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState bundle
+     * @return a view with a RecyclerView with the ingredients information
+     */
 
     @Nullable
     @Override

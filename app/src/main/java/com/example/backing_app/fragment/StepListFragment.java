@@ -1,4 +1,4 @@
-package com.example.backing_app.ui;
+package com.example.backing_app.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -52,6 +52,15 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
         this.mRecipeIndex = recipeIndex;
     }
 
+    /**
+     * A RecyclerView is created and populated with the steps information. For this task, a
+     * StepListAdapter is used
+     *
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState bundle
+     * @return a view with a RecyclerView with the ingredients information
+     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,14 +89,14 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
         return rootView;
     }
 
+    /**
+     * A StepDetailActivity is launched to present to the user more info about the desired step
+     * We need to provide the step and recipe index
+     * @param clickedItemIndex of the step clicked by the user
+     */
+
     @Override
     public void onItemClick(int clickedItemIndex) {
-
-        // Here I will call to an Activity containing 2 fragments
-        // A fragment for the video/image and a another for the description
-
-        // This is for the new Activity. Then it will load the step from the DB
-        // mStepsIndex.get(clickedItemIndex);
 
         Intent intent = new Intent(getActivity(), StepDetailActivity.class);
 

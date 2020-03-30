@@ -11,6 +11,10 @@ import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
+/**
+ * Java object that represents an Ingredient. The associated table has a foreign key set to its
+ * recipe. Please see RecipeDataBase for more info about the Database structure
+ */
 
 @Entity(tableName = "ingredients",
         indices =  {@Index("recipeId")},

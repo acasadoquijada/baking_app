@@ -1,4 +1,4 @@
-package com.example.backing_app.ui;
+package com.example.backing_app.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.backing_app.R;
+
+/**
+ * This Fragment class is in charge of representing the recipes in the MainActivity
+ * */
 
 public class StepInstructionFragment extends Fragment {
 

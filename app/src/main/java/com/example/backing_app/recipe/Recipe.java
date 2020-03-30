@@ -18,7 +18,12 @@ import java.util.List;
 import static androidx.room.ForeignKey.CASCADE;
 
 /**
- * POJO representing a Recipe
+ * POJO representing a Recipe.
+ *
+ * As we have tables for the ingredients and steps, we don't need to store that info within
+ * the recipe table
+ *
+ * Please see RecipeDataBase for more info about the Database structure
  */
 
 @Entity(tableName = "recipes")

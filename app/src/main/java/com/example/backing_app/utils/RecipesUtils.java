@@ -36,6 +36,7 @@ public class RecipesUtils {
      * @param recipesJSON String with the recipes info
      * @return list of recipes objects
      */
+
     private static List<Recipe> parseRecipes(String recipesJSON){
 
 
@@ -77,9 +78,6 @@ public class RecipesUtils {
                 ingredient.setRecipeId(recipe_id);
 
                 ingredients.add(ingredient);
-                Log.d(TAG,ingredient.getIngredientName());
-                Log.d(TAG,String.valueOf(ingredient.getQuantity()));
-                Log.d(TAG,ingredient.getMeasure());
             }
 
 
@@ -90,6 +88,13 @@ public class RecipesUtils {
         return ingredients;
     }
 
+    /**
+     * An index is added to the step name, to easily identify the step order when all the steps
+     * are presented to the user
+     * @param index of the step
+     * @param stepName name of the step
+     * @return a qualified step name. index + stepName
+     */
     private static String getQualifiedStepShortDescription(int index, String stepName){
 
         String qualifiedName = (index + 1) + ". " + stepName;
@@ -125,10 +130,6 @@ public class RecipesUtils {
                 step.setRecipeId(recipe_id);
 
                 steps.add(step);
-                Log.d(TAG,step.getDescription());
-                Log.d(TAG,step.getShortDescription());
-                Log.d(TAG,step.getThumbailURL());
-                Log.d(TAG,step.getVideoURL());
             }
 
         } catch (JSONException e){
@@ -164,6 +165,10 @@ public class RecipesUtils {
         return recipe;
     }
 
+    /**
+     * Obtain the recipe raw info from the internet and parses it into a List of Recipe objects
+     * @return a List of Recipes
+     */
     public static List<Recipe> getRecipes(){
 
         String recipesJSON = NetworkUtils.getRecipesJSON();

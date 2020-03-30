@@ -1,4 +1,4 @@
-package com.example.backing_app.ui;
+package com.example.backing_app.fragment;
 
 import android.content.Context;
 import android.util.Log;
@@ -13,6 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.backing_app.R;
 
 import java.util.List;
+
+/**
+ * RecyclerView Adapter for the steps representation
+ */
 
 public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.FragmentHolder> {
 

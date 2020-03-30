@@ -10,6 +10,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+/**
+ * Performs the http request to obtain the raw recipe data
+ */
 public class NetworkUtils {
 
     private static final String TAG = NetworkUtils.class.getSimpleName();

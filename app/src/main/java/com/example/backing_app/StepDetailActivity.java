@@ -16,14 +16,19 @@ import android.widget.Toast;
 
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.recipe.Step;
-import com.example.backing_app.ui.StepInstructionFragment;
-import com.example.backing_app.ui.StepListFragment;
-import com.example.backing_app.ui.VideoFragment;
+import com.example.backing_app.fragment.StepInstructionFragment;
+import com.example.backing_app.fragment.VideoFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
 
-import static com.example.backing_app.ui.StepListFragment.RECIPE_INDEX_KEY;
-import static com.example.backing_app.ui.StepListFragment.STEP_INDEX_KEY;
+import static com.example.backing_app.fragment.StepListFragment.RECIPE_INDEX_KEY;
+import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX_KEY;
 
+/**
+ * This Activity provides to the user with more info of a step. This info is:
+ * - Video (if available)
+ * - Description
+ * In addition, two navigation buttons are added to easily move between steps
+ */
 public class StepDetailActivity extends AppCompatActivity {
 
     private int mRecipeIndex;
@@ -34,6 +39,12 @@ public class StepDetailActivity extends AppCompatActivity {
     private StepInstructionFragment mStepInstructionFragment;
 
     private static String TAG = StepDetailActivity.class.getSimpleName();
+
+    /**
+     * First we setup the navigation buttons and get an instance of the RecipeDataBase
+     * The VideoFragment and StepInstructionFragment are created if needed
+     * @param savedInstanceState bundle
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,12 +135,13 @@ public class StepDetailActivity extends AppCompatActivity {
                 mStepInstructionFragment).commit();
     }
 
+    /**
+     * Method run when the user clicks "previous button"
+     */
     private void previousStep(){
 
         // We know steps start at index 0, so we take advantage of this
         final int previousStepIndex = mStepIndex - 1;
-
-        Log.d(TAG,"Previous step index " + previousStepIndex);
 
         if(previousStepIndex >= 0){
             Intent intent = new Intent(getApplicationContext(), StepDetailActivity.class);
@@ -146,10 +158,17 @@ public class StepDetailActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Method run when the user clicks "next button"
+     */
+
     private void nextStep(){
         AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
+
+                // We need to check in the DB if the step n+1 exists, if so a new StepDetailActivity
+                // is launched. Otherwise a Toast is shown
                 final int nextStepIndex = mStepIndex + 1;
 
                 Step s = mDatabase.stepDAO().getStep(mRecipeIndex, nextStepIndex);

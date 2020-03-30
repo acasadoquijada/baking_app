@@ -25,23 +25,25 @@ public class RecipeViewModel extends AndroidViewModel {
         Log.d(TAG,"I CREATE");
     }
 
+    /**
+     * First, we check in the DB if there is recipe data. If not, we get it from the internet and then
+     * is stored.
+     *
+     * For this, we assume the data in the webpage is static and doesn't change. Otherwise, more
+     * checking would be needed
+     */
     public void loadData(){
 
         if(mRecipes == null){
 
             mRecipes = mDatabase.recipeDAO().getRecipes();
 
+            // No data in DB
             if(mRecipes.size() == 0){
-                // We don't have!!
-                Log.d(TAG,"No recipe in DB");
-
-                // We get the recipes and store them in the DataBase
-                Log.d(TAG,"I request the recipes online");
 
                 mRecipes = RecipesUtils.getRecipes();
 
-                Log.d(TAG,"I store the recipes in the Database");
-
+                // Store the recipes.
                 for(int i = 0; i < mRecipes.size(); i++){
                     mDatabase.recipeDAO().insertRecipe(mRecipes.get(i));
 

@@ -11,6 +11,19 @@ import com.example.backing_app.recipe.Ingredient;
 import com.example.backing_app.recipe.Recipe;
 import com.example.backing_app.recipe.Step;
 
+/**
+ * Class representing the database. It has three tables:
+ * - Recipes
+ * - Steps
+ * - Ingredients
+ *
+ * Steps and Ingredients have a foreign key to its recipe index.
+ *
+ * This design has been done in order to reduce the memory used by the application. By having the
+ * recipe index and/or the step index each Activity is able to recover the necessary data from the
+ * database avoiding passing object such as Recipe, Ingredient or Step using intents.
+ */
+
 @Database(entities = {Recipe.class, Step.class, Ingredient.class}, version = 1, exportSchema = false)
 @TypeConverters({StepListConverter.class, IngredientListConverter.class})
 public abstract class RecipeDataBase extends RoomDatabase {

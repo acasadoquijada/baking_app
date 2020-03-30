@@ -1,4 +1,4 @@
-package com.example.backing_app.ui;
+package com.example.backing_app.fragment;
 
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -29,6 +29,10 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+
+/**
+ * Fragment that reproduces the video associated to the step, if video is available
+ */
 
 public class VideoFragment extends Fragment {
 
@@ -82,13 +86,12 @@ public class VideoFragment extends Fragment {
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(),trackSelector,loadControl);
             mSimpleExoPlayerView.setPlayer(mExoPlayer);
 
+            // If no video, the mExoPlayer background shows a image letting the user know about this
+
             if(mMediaURL.equals(getString(R.string.step_no_video))) {
                 mSimpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
                         (getResources(), R.drawable.no_video));
             }
-
-            // Obtained from this stackoverflow post
-            // https://stackoverflow.com/questions/48988063/how-can-i-scale-video-in-exoplayer-v2-play-video-in-full-screen
 
             mSimpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
             mExoPlayer.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);

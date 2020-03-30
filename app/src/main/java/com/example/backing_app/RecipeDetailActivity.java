@@ -9,19 +9,23 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.recipe.Ingredient;
-import com.example.backing_app.ui.IngredientFragment;
-import com.example.backing_app.ui.StepListFragment;
-import com.example.backing_app.ui.RecipeListFragment;
+import com.example.backing_app.fragment.IngredientListFragment;
+import com.example.backing_app.fragment.StepListFragment;
+import com.example.backing_app.fragment.RecipeListFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
 
 import java.util.List;
 
+/**
+ * This Activity presents more details about a recipe to the user. This are:
+ * - Ingredients
+ * - Steps. Is possible to click on them to obtain more info
+ */
 public class RecipeDetailActivity extends AppCompatActivity {
 
     private static final String RECIPE_INDEX_KEY = "recipe_index";
@@ -33,6 +37,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     private static final String TAG = RecipeDetailActivity.class.getSimpleName();
 
+    /**
+     * Using the recipe_index the necessary info is loaded, in this case is:
+     * - Ingredients
+     * - Short description of the steps
+     *
+     * Later the UI is populated using a IngredientListFragment and a StepListFragment
+     * @param savedInstanceState bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +59,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
         // We only care about the intent if we want to get recipe_index
         if(savedInstanceState != null){
             mRecipeIndex = savedInstanceState.getInt(RECIPE_INDEX_KEY);
-            Log.d(TAG, "Recipe index when recovered: " + mRecipeIndex);
         } else{
             Intent intent;
             intent = getIntent();
@@ -58,6 +69,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         mOrientation = getResources().getConfiguration().orientation;
 
+        // As we have the recipe index, we can obtain the info here, avoiding passing complex objects
+        // such as Recipe or Step using intents
         AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -74,49 +87,38 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Two Fragments are created (StepListFragment and IngredientListFragment)
+     * Only the necessary info is provided to them
+     */
+
     private void populateUI(){
-        setupIngredientsNew();
-        setupSteps();
-    }
-
-    private void setupIngredientsNew(){
         FragmentManager fragmentManager = getSupportFragmentManager();
-
-
-
-
-    }
-
-    private void setupSteps(){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        Log.d(TAG,"Recipe index: " + String.valueOf(mRecipeIndex));
 
         StepListFragment stepListFragment = new StepListFragment();
-        IngredientFragment ingredientFragment = new IngredientFragment();
-
+        IngredientListFragment ingredientListFragment = new IngredientListFragment();
 
         if(mOrientation == Configuration.ORIENTATION_LANDSCAPE){
             stepListFragment.setOrientation(LinearLayout.HORIZONTAL);
-            ingredientFragment.setOrientation(LinearLayout.HORIZONTAL);
+            ingredientListFragment.setOrientation(LinearLayout.HORIZONTAL);
 
             stepListFragment.setSpanCount(3);
-            ingredientFragment.setSpanCount(3);
+            ingredientListFragment.setSpanCount(3);
+
         } else{
             stepListFragment.setOrientation(LinearLayout.VERTICAL);
-            ingredientFragment.setOrientation(LinearLayout.VERTICAL);
+            ingredientListFragment.setOrientation(LinearLayout.VERTICAL);
 
             stepListFragment.setSpanCount(1);
-            ingredientFragment.setSpanCount(1);
-
+            ingredientListFragment.setSpanCount(1);
         }
 
         stepListFragment.setStepsShortDescription(mStepsShortDescription);
         stepListFragment.setRecipeIndex(mRecipeIndex);
 
-        ingredientFragment.setIngredients(mIngredients);
+        ingredientListFragment.setIngredients(mIngredients);
 
-        fragmentManager.beginTransaction().add(R.id.ingredients_frame_layout,ingredientFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.ingredients_frame_layout, ingredientListFragment).commit();
         fragmentManager.beginTransaction().add(R.id.steps_frame_layout, stepListFragment).commit();
 
     }
@@ -135,7 +137,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d(TAG,"Recipe index when stored: "+ String.valueOf(mRecipeIndex));
         outState.putInt(RECIPE_INDEX_KEY, mRecipeIndex);
     }
 }

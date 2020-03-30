@@ -1,18 +1,19 @@
-package com.example.backing_app.ui;
+package com.example.backing_app.fragment;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.backing_app.R;
-
-
 import java.util.List;
+
+
+/**
+ * RecyclerView Adapter for the recipe representation
+ */
 
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeHolder> {
 

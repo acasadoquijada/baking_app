@@ -1,4 +1,4 @@
-package com.example.backing_app.ui;
+package com.example.backing_app.fragment;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,6 +13,10 @@ import com.example.backing_app.R;
 import com.example.backing_app.recipe.Ingredient;
 
 import java.util.List;
+
+/**
+ * RecyclerView Adapter for the ingredient representation
+ */
 
 public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAdapter.IngredientHolder> {
 
