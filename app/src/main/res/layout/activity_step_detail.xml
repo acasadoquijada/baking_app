@@ -7,8 +7,8 @@
 
     <FrameLayout
         android:id="@+id/video_frame_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -17,7 +17,7 @@
     <FrameLayout
         android:id="@+id/step_description_frame_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -29,21 +29,29 @@
 
     <Button
         android:id="@+id/previous_button"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:padding="16dp"
         android:text="Previous step"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/step_description_frame_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/step_description_frame_layout"
+        tools:text="Previous step" />
 
     <Button
         android:id="@+id/next_button"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/colorPrimary"
+        android:padding="16dp"
         android:text="Next step"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/step_description_frame_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/step_description_frame_layout"
+        tools:text="Next step" />
 </androidx.constraintlayout.widget.ConstraintLayout>

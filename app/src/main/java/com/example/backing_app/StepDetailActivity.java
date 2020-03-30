@@ -40,47 +40,34 @@ public class StepDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
 
-        // Create only new fragments when no previous instance saved
-        if(savedInstanceState == null){
+        setupNavigationButtons();
 
+        mDatabase = RecipeDataBase.getInstance(this);
+
+        // Create only new fragments when no previous instance saved
+
+        if(savedInstanceState != null){
+            mStepIndex = savedInstanceState.getInt(STEP_INDEX_KEY);
+            mRecipeIndex = savedInstanceState.getInt(RECIPE_INDEX_KEY);
+        } else {
             ActionBar actionBar = this.getSupportActionBar();
 
-            if(actionBar != null){
+            if (actionBar != null) {
                 actionBar.setDisplayHomeAsUpEnabled(true);
             }
-
-            Button button = findViewById(R.id.next_button);
-
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    nextStep();
-                }
-            });
-
-            Button button1 = findViewById(R.id.previous_button);
-
-            button1.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    previousStep();
-                }
-            });
 
             Intent intent;
 
             intent = getIntent();
 
-            mRecipeIndex = intent.getIntExtra(RECIPE_INDEX_KEY,0);
-            mStepIndex = intent.getIntExtra(STEP_INDEX_KEY,0);
-
-            mDatabase = RecipeDataBase.getInstance(this);
+            mRecipeIndex = intent.getIntExtra(RECIPE_INDEX_KEY, 0);
+            mStepIndex = intent.getIntExtra(STEP_INDEX_KEY, 0);
 
             AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
                     step = mDatabase.stepDAO().getStep(mRecipeIndex, mStepIndex);
-                    Log.d(TAG,step.getShortDescription());
+                    Log.d(TAG, step.getShortDescription());
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -90,10 +77,29 @@ public class StepDetailActivity extends AppCompatActivity {
                     });
                 }
             });
-
         }
     }
 
+    private void setupNavigationButtons(){
+        Button button = findViewById(R.id.next_button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nextStep();
+            }
+        });
+
+        Button button1 = findViewById(R.id.previous_button);
+
+        button1.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                previousStep();
+            }
+        });
+
+    }
     private void populateUI(){
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -175,6 +181,13 @@ public class StepDetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STEP_INDEX_KEY, mStepIndex);
+        outState.putInt(RECIPE_INDEX_KEY, mRecipeIndex);
     }
 
     @Override

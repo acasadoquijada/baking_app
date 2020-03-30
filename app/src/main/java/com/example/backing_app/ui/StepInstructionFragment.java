@@ -15,12 +15,7 @@ import com.example.backing_app.R;
 public class StepInstructionFragment extends Fragment {
 
     private String mStepInstruction;
-    private onStepDescriptionChangedListener mCallback;
-
-
-    public interface onStepDescriptionChangedListener{
-        void onStepDescriptionChanged(String description);
-    }
+    private static final String STEP_DESCRIPTION_KEY="step_description";
 
     public StepInstructionFragment(){
 
@@ -34,6 +29,9 @@ public class StepInstructionFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        if(savedInstanceState != null){
+            mStepInstruction = savedInstanceState.getString(STEP_DESCRIPTION_KEY);
+        }
         View rootView = inflater.inflate(R.layout.step_instruction_fragment,container,false);
 
         TextView step = rootView.findViewById(R.id.step_description);
@@ -42,5 +40,10 @@ public class StepInstructionFragment extends Fragment {
         
         return rootView;
 
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString(STEP_DESCRIPTION_KEY,mStepInstruction);
     }
 }

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.backing_app.R;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
@@ -23,6 +24,7 @@ import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
@@ -46,8 +48,6 @@ public class VideoFragment extends Fragment {
 
     }
 
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,9 +58,6 @@ public class VideoFragment extends Fragment {
             mReady = savedInstanceState.getBoolean(PLAYER_IS_READY_KEY);
         }
 
-
-
-        //        Log.d(TAG,mMediaURL);
         View rootView = inflater.inflate(R.layout.video_fragment,container,false);
 
         mSimpleExoPlayerView = rootView.findViewById(R.id.fragment_video_player_view);
@@ -85,12 +82,16 @@ public class VideoFragment extends Fragment {
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(),trackSelector,loadControl);
             mSimpleExoPlayerView.setPlayer(mExoPlayer);
 
-//            mMediaURL = "https://finofilipino.org/wp-content/uploads/2020/03/qwerqwerfwqertg3.mp4";
-
             if(mMediaURL.equals(getString(R.string.step_no_video))) {
                 mSimpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
                         (getResources(), R.drawable.no_video));
             }
+
+            // Obtained from this stackoverflow post
+            // https://stackoverflow.com/questions/48988063/how-can-i-scale-video-in-exoplayer-v2-play-video-in-full-screen
+
+            mSimpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
+            mExoPlayer.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
 
             Uri mediaUri = Uri.parse(mMediaURL).buildUpon().build();
 
@@ -102,17 +103,17 @@ public class VideoFragment extends Fragment {
                             new DefaultDataSourceFactory(getContext(), userAgent),
                             new DefaultExtractorsFactory(),null,null);
 
-
             mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
+            mExoPlayer.seekTo(mPos);
+            mExoPlayer.setPlayWhenReady(mReady);
         }
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putString(MEDIA_URL_KEY,mMediaURL);
-        //outState.putLong(PLAYER_CURRENT_POS_KEY, Math.max(0, mExoPlayer.getCurrentPosition()));
-        //outState.putBoolean(PLAYER_IS_READY_KEY, mExoPlayer.getPlayWhenReady());
+        outState.putLong(PLAYER_CURRENT_POS_KEY, mPos);
+        outState.putBoolean(PLAYER_IS_READY_KEY, mReady);
     }
 
     private void releasePlayer(){
@@ -120,42 +121,14 @@ public class VideoFragment extends Fragment {
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;
-            Log.d(TAG, "I SHOULD HAVE RELEASED THE PLAYER");
         }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "Stop");
-        releasePlayer();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        releasePlayer();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "Pause");
-        releasePlayer();
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "Destroy");
-        releasePlayer();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "Detach");
+        mPos = Math.max(0, mExoPlayer.getCurrentPosition());
+        mReady = mExoPlayer.getPlayWhenReady();
         releasePlayer();
     }
 }
