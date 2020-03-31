@@ -56,7 +56,7 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
         return -1;
     }
 
-    class IngredientHolder extends RecyclerView.ViewHolder {
+     class IngredientHolder extends RecyclerView.ViewHolder {
 
         final TextView itemName;
         final TextView itemQuantity;

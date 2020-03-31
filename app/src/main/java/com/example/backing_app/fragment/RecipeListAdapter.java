@@ -67,21 +67,12 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     }
 
     class RecipeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final RecipeFragmentBinding mBinding;
 
         private TextView itemName;
         private TextView itemServing;
 
-        RecipeHolder(RecipeFragmentBinding binding) {
-            super(binding.getRoot());
-            this.mBinding = binding;
-        }
-
-
-
         RecipeHolder(@NonNull View itemView) {
             super(itemView);
-            mBinding = DataBindingUtil.setContentView(g,itemView.getId());
 
             itemName = itemView.findViewById(R.id.recipe_name);
             itemServing = itemView.findViewById(R.id.recipe_serving);
