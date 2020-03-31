@@ -11,6 +11,13 @@ The user is able to navigate the app selecting the desired recipe and its differ
 TO-DO: Application organization and add some screenshots
 
 
+
+### Relevant libraries used
+
+- [Moshi](https://github.com/square/moshi) for parsing the recipes from JSON
+
+- [ExoPlayer](https://github.com/google/ExoPlayer) for reproducing the step videos
+
 ## External resources
 
 The image shown where a step doesn't contain a video was obatined from https://videomembertheme.szablonstrony.pl/wp-content/themes/videomembertheme/images/novideo.png

@@ -1,9 +1,7 @@
 package com.example.backing_app.fragment;
 
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +67,7 @@ public class VideoFragment extends Fragment {
 
         // If no video, no player
 
-        if(mMediaURL.equals(getString(R.string.step_no_video))) {
+        if(mMediaURL.equals("")) {
             ImageView image = rootView.findViewById(R.id.no_video_image);
             image.setVisibility(View.VISIBLE);
         } else{
@@ -87,7 +85,6 @@ public class VideoFragment extends Fragment {
 
         if(mExoPlayer == null){
 
-            Log.d(TAG, "I CREATE");
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
 

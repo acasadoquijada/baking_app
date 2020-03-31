@@ -1,13 +1,12 @@
 package com.example.backing_app.recipe;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import com.squareup.moshi.Json;
 
 import static androidx.room.ForeignKey.CASCADE;
 
@@ -23,38 +22,20 @@ import static androidx.room.ForeignKey.CASCADE;
                 childColumns = "recipeId",
                 onDelete = CASCADE))
 
-public class Ingredient implements Parcelable {
+public class Ingredient {
 
     @PrimaryKey(autoGenerate = true)
     private int key;
-    private int quantity;
+    private float quantity;
     private String measure;
-    private String ingredientName;
+    @Json(name = "ingredient") private String ingredientName;
 
     @ColumnInfo(name = "recipeId")
     private int recipeId;
 
-    protected Ingredient(Parcel in) {
-        quantity = in.readInt();
-        measure = in.readString();
-        ingredientName = in.readString();
-    }
-
     public Ingredient(){
 
     }
-
-    public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
-        @Override
-        public Ingredient createFromParcel(Parcel in) {
-            return new Ingredient(in);
-        }
-
-        @Override
-        public Ingredient[] newArray(int size) {
-            return new Ingredient[size];
-        }
-    };
 
     public int getKey() {
         return key;
@@ -72,7 +53,7 @@ public class Ingredient implements Parcelable {
         this.recipeId = recipeId;
     }
 
-    public int getQuantity() {
+    public float getQuantity() {
         return quantity;
     }
 
@@ -92,19 +73,8 @@ public class Ingredient implements Parcelable {
         this.measure = measure;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(float quantity) {
         this.quantity = quantity;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(quantity);
-        dest.writeString(measure);
-        dest.writeString(ingredientName);
-    }
 }

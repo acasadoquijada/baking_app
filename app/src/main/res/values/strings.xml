@@ -5,4 +5,16 @@
     <string name="ingredients_label">Ingredients</string>
     <string name="steps_label">Steps</string>
     <string name="step_no_video">No video available for this step</string>
+    <string name="appwidget_text">You will see the ingredients here</string>
+    <string name="add_widget">Add widget</string>
+    <string name="cooking_book_view_content_description">Represents an small cooking book.
+        It purpose is for decoration</string>
+
+    <string name="cake_view_content_description">Represents an small cake.
+        It purpose is for decoration</string>
+
+    <string name="no_video_image_content_description">This image is only visible when there is no
+        video available. It lets the user know about it</string>
+    <string name="previous_step">Previous step</string>
+    <string name="next_step">Next step</string>
 </resources>

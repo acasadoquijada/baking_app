@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    This layout is used by IngredientListFragment, RecipeListFragment and StepListFragment
+    As there is only one element in this Layout, databinding is not used
+ -->
+
 <androidx.recyclerview.widget.RecyclerView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/recipe_list"
+    android:id="@+id/fragment_list"
     xmlns:android="http://schemas.android.com/apk/res/android" />

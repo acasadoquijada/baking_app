@@ -21,6 +21,7 @@ android {
         }
     }
 
+    dataBinding.enabled = true
 }
 
 dependencies {
@@ -38,4 +39,5 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.exoplayer:exoplayer:r2.2.0'
+    implementation 'com.squareup.moshi:moshi:1.9.2'
 }

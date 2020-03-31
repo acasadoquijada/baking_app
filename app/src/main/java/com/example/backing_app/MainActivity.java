@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         mDatabase = RecipeDataBase.getInstance(this);
 
-        AppExecutorUtils.getsInstance().networkIO().execute(new Runnable() {
+        AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 mRecipeViewModel.loadData();
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Creates a RecipeListFragment providing the necessary information about the recipes:
+     *
      * - name
      * - servings
      *

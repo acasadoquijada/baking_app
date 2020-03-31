@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/no_video"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:contentDescription="@string/no_video_image_content_description" />
 
 </com.google.android.exoplayer2.ui.SimpleExoPlayerView>

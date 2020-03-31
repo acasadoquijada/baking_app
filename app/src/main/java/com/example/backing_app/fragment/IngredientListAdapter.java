@@ -20,9 +20,9 @@ import java.util.List;
 
 public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAdapter.IngredientHolder> {
 
-    private List<Ingredient> mIngredients;
+    private final List<Ingredient> mIngredients;
 
-    public IngredientListAdapter(List<Ingredient> ingredients) {
+    IngredientListAdapter(List<Ingredient> ingredients) {
         mIngredients = ingredients;
     }
 
@@ -58,11 +58,11 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
 
     class IngredientHolder extends RecyclerView.ViewHolder {
 
-        TextView itemName;
-        TextView itemQuantity;
-        TextView itemMeasure;
+        final TextView itemName;
+        final TextView itemQuantity;
+        final TextView itemMeasure;
 
-        public IngredientHolder(@NonNull View itemView) {
+        IngredientHolder(@NonNull View itemView) {
             super(itemView);
 
             itemName = itemView.findViewById(R.id.ingredient_name);
@@ -70,7 +70,7 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
             itemMeasure = itemView.findViewById(R.id.ingredient_measure);
         }
 
-        public void bind (String name, int quantity, String measure){
+        void bind(String name, float quantity, String measure){
             itemName.setText(name);
             itemQuantity.setText(String.valueOf(quantity));
             itemMeasure.setText(measure);

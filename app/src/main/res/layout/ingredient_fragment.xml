@@ -7,14 +7,15 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/cooking_book_view"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/recipe_book" />
+        app:srcCompat="@drawable/recipe_book"
+        android:contentDescription="@string/cooking_book_view_content_description" />
 
     <TextView
         android:id="@+id/ingredient_name"
@@ -22,10 +23,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView2"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        tools:text="Recipe name" />
+        app:layout_constraintBottom_toTopOf="@+id/cooking_book_view"
+        app:layout_constraintStart_toEndOf="@+id/cooking_book_view"
+        app:layout_constraintTop_toBottomOf="@+id/cooking_book_view"
+        tools:text="Ingredient name" />
 
     <TextView
         android:id="@+id/ingredient_quantity"
@@ -36,7 +37,7 @@
         app:layout_constraintBottom_toTopOf="@+id/ingredient_name"
         app:layout_constraintStart_toEndOf="@+id/ingredient_name"
         app:layout_constraintTop_toBottomOf="@+id/ingredient_name"
-        tools:text="Recipe quantity" />
+        tools:text="Ingredient quantity" />
 
     <TextView
         android:id="@+id/ingredient_measure"
@@ -48,6 +49,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/ingredient_quantity"
         app:layout_constraintTop_toBottomOf="@+id/ingredient_quantity"
-        tools:text="Recipe measure" />
+        tools:text="Ingredient measure" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

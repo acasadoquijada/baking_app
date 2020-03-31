@@ -63,7 +63,7 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
      */
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         if(savedInstanceState != null){
@@ -71,10 +71,9 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
             mSpanCount = savedInstanceState.getInt(span_count_token);
         }
 
-        final View rootView = inflater.inflate(R.layout.step_list_layout, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_list_layout, container, false);
 
-
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.step_list);
+        RecyclerView recyclerView = rootView.findViewById(R.id.fragment_list);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), mSpanCount);
 

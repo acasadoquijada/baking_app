@@ -1,7 +1,6 @@
 package com.example.backing_app.utils;
 
 import android.net.Uri;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +12,7 @@ import java.util.Scanner;
 /**
  * Performs the http request to obtain the raw recipe data
  */
-public class NetworkUtils {
+class NetworkUtils {
 
     private static final String TAG = NetworkUtils.class.getSimpleName();
 

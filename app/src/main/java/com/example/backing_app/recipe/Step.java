@@ -1,8 +1,5 @@
 package com.example.backing_app.recipe;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -23,41 +20,21 @@ import static androidx.room.ForeignKey.CASCADE;
         childColumns = "recipeId",
         onDelete = CASCADE))
 
-public class Step implements Parcelable {
+public class Step {
     @PrimaryKey(autoGenerate = true)
     private int key;
-    private int index;
+    private int id;
     private String shortDescription;
     private String description;
     private String videoURL;
-    private String thumbailURL;
+    private String thumbnailURL;
     @ColumnInfo(name = "recipeId")
     private int recipeId;
 
 
-    protected Step(Parcel in) {
-        index = in.readInt();
-        shortDescription = in.readString();
-        description = in.readString();
-        videoURL = in.readString();
-        thumbailURL = in.readString();
-    }
-
     public Step(){
 
     }
-
-    public static final Creator<Step> CREATOR = new Creator<Step>() {
-        @Override
-        public Step createFromParcel(Parcel in) {
-            return new Step(in);
-        }
-
-        @Override
-        public Step[] newArray(int size) {
-            return new Step[size];
-        }
-    };
 
     public void setRecipeId(int recipeId) {
         this.recipeId = recipeId;
@@ -67,8 +44,8 @@ public class Step implements Parcelable {
         return recipeId;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setDescription(String description) {
@@ -79,16 +56,16 @@ public class Step implements Parcelable {
         this.shortDescription = shortDescription;
     }
 
-    public void setThumbailURL(String thumbailURL) {
-        this.thumbailURL = thumbailURL;
+    public void setThumbnailURL(String thumbnailURL) {
+        this.thumbnailURL = thumbnailURL;
     }
 
     public void setVideoURL(String videoURL) {
         this.videoURL = videoURL;
     }
 
-    public int getIndex() {
-        return index;
+    public int getId() {
+        return id;
     }
 
     public String getDescription() {
@@ -99,26 +76,12 @@ public class Step implements Parcelable {
         return shortDescription;
     }
 
-    public String getThumbailURL() {
-        return thumbailURL;
+    public String getThumbnailURL() {
+        return thumbnailURL;
     }
 
     public String getVideoURL() {
         return videoURL;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(index);
-        dest.writeString(shortDescription);
-        dest.writeString(description);
-        dest.writeString(videoURL);
-        dest.writeString(thumbailURL);
     }
 
     public int getKey() {

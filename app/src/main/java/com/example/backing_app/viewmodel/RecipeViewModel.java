@@ -2,8 +2,6 @@ package com.example.backing_app.viewmodel;
 
 import android.app.Application;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
@@ -16,13 +14,11 @@ import java.util.List;
 public class RecipeViewModel extends AndroidViewModel {
 
     private static final String TAG = RecipeViewModel.class.getSimpleName();
-    private List<Recipe> mRecipes;
-    private RecipeDataBase mDatabase;
+    private final RecipeDataBase mDatabase;
 
     public RecipeViewModel(@NonNull Application application) {
         super(application);
         mDatabase = RecipeDataBase.getInstance(application.getApplicationContext());
-        Log.d(TAG,"I CREATE");
     }
 
     /**
@@ -34,31 +30,31 @@ public class RecipeViewModel extends AndroidViewModel {
      */
     public void loadData(){
 
-        if(mRecipes == null){
+        // First we try to load the recipe data form the DB
+        List<Recipe> mRecipes = mDatabase.recipeDAO().getRecipes();
 
-            mRecipes = mDatabase.recipeDAO().getRecipes();
+        // If there is no data, we get the info online
+        if(mRecipes != null && mRecipes.size() == 0){
 
-            // No data in DB
-            if(mRecipes.size() == 0){
+            mRecipes = RecipesUtils.getRecipes();
 
-                mRecipes = RecipesUtils.getRecipes();
-
+            if(mRecipes != null){
                 // Store the recipes.
-                for(int i = 0; i < mRecipes.size(); i++){
+                for(int i = 0; i < mRecipes.size(); i++) {
                     mDatabase.recipeDAO().insertRecipe(mRecipes.get(i));
 
                     // Store the steps
-                    for(int j = 0; j < mRecipes.get(i).getSteps().size(); j++){
+                    for (int j = 0; j < mRecipes.get(i).getSteps().size(); j++) {
                         mDatabase.stepDAO().insertStep(mRecipes.get(i).getSteps().get(j));
                     }
 
                     // Store the ingredients
-                    for(int j = 0; j < mRecipes.get(i).getIngredients().size(); j++){
+                    for (int j = 0; j < mRecipes.get(i).getIngredients().size(); j++) {
                         mDatabase.ingredientDAO().insertIngredient(mRecipes.get(i).getIngredients().get(j));
                     }
                 }
-
             }
         }
     }
+
 }

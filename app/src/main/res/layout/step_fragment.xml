@@ -9,14 +9,15 @@
     >
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/cake_image_view"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/cake" />
+        app:srcCompat="@drawable/cake"
+        android:contentDescription="@string/cake_view_content_description" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,7 +27,7 @@
         android:layout_margin="8dp"
         android:padding="8dp"
         tools:text="1. Recipe Introduction"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintBottom_toTopOf="@+id/cake_image_view"
+        app:layout_constraintStart_toEndOf="@+id/cake_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/cake_image_view" />
 </androidx.constraintlayout.widget.ConstraintLayout>

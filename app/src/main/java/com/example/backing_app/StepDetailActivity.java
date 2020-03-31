@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -35,8 +34,6 @@ public class StepDetailActivity extends AppCompatActivity {
     private int mStepIndex;
     private Step step;
     private RecipeDataBase mDatabase;
-    private VideoFragment mVideoFragment;
-    private StepInstructionFragment mStepInstructionFragment;
 
     private static String TAG = StepDetailActivity.class.getSimpleName();
 
@@ -78,7 +75,6 @@ public class StepDetailActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     step = mDatabase.stepDAO().getStep(mRecipeIndex, mStepIndex);
-                    Log.d(TAG, step.getShortDescription());
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -114,21 +110,21 @@ public class StepDetailActivity extends AppCompatActivity {
     private void populateUI(){
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        mVideoFragment = new VideoFragment();
+        VideoFragment mVideoFragment = new VideoFragment();
 
         if(!step.getVideoURL().equals("")){
             mVideoFragment.setMediaURL(step.getVideoURL());
-        } else if(!step.getThumbailURL().equals("")){
-            mVideoFragment.setMediaURL(step.getThumbailURL());
+        } else if(!step.getThumbnailURL().equals("")){
+            mVideoFragment.setMediaURL(step.getThumbnailURL());
         } else {
-            mVideoFragment.setMediaURL(getString(R.string.step_no_video));
+            mVideoFragment.setMediaURL("");
         }
 
-        mStepInstructionFragment = new StepInstructionFragment();
+        StepInstructionFragment mStepInstructionFragment = new StepInstructionFragment();
 
         mStepInstructionFragment.setStepInstruction(step.getDescription());
 
-        fragmentManager.beginTransaction().add(R.id.video_frame_layout,mVideoFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.video_frame_layout, mVideoFragment).commit();
 
         fragmentManager.beginTransaction().add(
                 R.id.step_description_frame_layout,
@@ -138,6 +134,7 @@ public class StepDetailActivity extends AppCompatActivity {
     /**
      * Method run when the user clicks "previous button"
      */
+
     private void previousStep(){
 
         // We know steps start at index 0, so we take advantage of this

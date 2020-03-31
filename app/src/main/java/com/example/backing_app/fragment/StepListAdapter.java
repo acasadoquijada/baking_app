@@ -20,7 +20,7 @@ import java.util.List;
 
 public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.FragmentHolder> {
 
-    private List<String> mSteps;
+    private final List<String> mSteps;
     private final ItemClickListener mItemClickListener;
 
     private static final String TAG = StepListAdapter.class.getSimpleName();
