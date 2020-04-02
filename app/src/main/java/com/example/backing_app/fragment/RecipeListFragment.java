@@ -1,5 +1,6 @@
 package com.example.backing_app.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,10 +29,15 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
 
     private List<String> mRecipesName;
     private List<String> mRecipesServing;
+    private onGridElementClick mCallback;
 
     private int mOrientation;
     private int mSpanCount;
 
+
+    public interface onGridElementClick{
+        void onItemSelected(int pos);
+    }
     public RecipeListFragment(){
 
     }
@@ -53,6 +59,18 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
     }
 
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        try {
+            mCallback = (onGridElementClick) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(
+                    context.toString() + "must implement onGridElementClick interface");
+        }
+    }
+
     /**
      * A RecyclerView is created and populated with the recipes information. For this task, a
      * RecipeListAdapter is used
@@ -62,6 +80,7 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
      * @param savedInstanceState bundle
      * @return a view with a RecyclerView with the recipes information
      */
+
 
     @Nullable
     @Override
@@ -95,12 +114,7 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
      */
     @Override
     public void onItemClick(int clickedItemIndex) {
-
-        Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
-
-        intent.putExtra(RECIPE_ID_KEY,(clickedItemIndex+1)); // Recipe index starts in 1 instead of 0
-
-        startActivity(intent);
+        mCallback.onItemSelected(clickedItemIndex);
     }
 
     @Override

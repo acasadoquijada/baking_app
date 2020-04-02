@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.fragment.RecipeListFragment;
@@ -15,6 +17,8 @@ import com.example.backing_app.viewmodel.RecipeViewModel;
 
 import java.util.List;
 
+import static com.example.backing_app.fragment.RecipeListFragment.RECIPE_ID_KEY;
+
 
 /**
  * Main class. It's in charge of downloading and storing the recipe data in the database
@@ -22,7 +26,7 @@ import java.util.List;
  * in this case, the recipe names and their serving number
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecipeListFragment.onGridElementClick{
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -96,5 +100,16 @@ public class MainActivity extends AppCompatActivity {
         recipeListFragment.setRecipesServing(mRecipesServing);
 
         fragmentManager.beginTransaction().add(R.id.recipes_frame_layout,recipeListFragment).commit();
+    }
+
+    @Override
+    public void onItemSelected(int pos) {
+
+        Intent intent = new Intent(this, RecipeDetailActivity.class);
+
+        intent.putExtra(RECIPE_ID_KEY,(pos+1)); // Recipe index starts in 1 instead of 0
+
+        startActivity(intent);
+
     }
 }

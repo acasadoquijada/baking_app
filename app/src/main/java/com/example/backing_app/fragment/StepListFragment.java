@@ -1,5 +1,6 @@
 package com.example.backing_app.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,9 +32,26 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
     private int mSpanCount;
     private int mRecipeIndex;
 
+    private onGridElementClick mCallback;
+
+    public interface onGridElementClick{
+        void onItemSelected(int pos);
+    }
 
     public StepListFragment() {
 
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        try {
+            mCallback = (onGridElementClick) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(
+                    context.toString() + "must implement onGridElementClick interface");
+        }
     }
 
     public void setOrientation(int orientation) {
@@ -97,12 +115,14 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
     @Override
     public void onItemClick(int clickedItemIndex) {
 
-        Intent intent = new Intent(getActivity(), StepDetailActivity.class);
+
+        mCallback.onItemSelected(clickedItemIndex);
+/*        Intent intent = new Intent(getActivity(), StepDetailActivity.class);
 
         intent.putExtra(STEP_INDEX_KEY, clickedItemIndex);
         intent.putExtra(RECIPE_INDEX_KEY, mRecipeIndex);
         startActivity(intent);
-
+*/
     }
 
     @Override

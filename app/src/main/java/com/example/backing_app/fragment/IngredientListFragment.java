@@ -1,5 +1,7 @@
 package com.example.backing_app.fragment;
 
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProvider;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.backing_app.IngredientWidgetProvider;
 import com.example.backing_app.R;
 import com.example.backing_app.recipe.Ingredient;
 
