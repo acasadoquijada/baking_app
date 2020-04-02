@@ -45,8 +45,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
     private boolean mTwoPane;
     private static final String TAG = RecipeDetailActivity.class.getSimpleName();
 
-
-
     /**
      * Using the recipe_index the necessary info is loaded, in this case is:
      * - Ingredients
@@ -155,6 +153,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             populateUI();
                         }
                     });

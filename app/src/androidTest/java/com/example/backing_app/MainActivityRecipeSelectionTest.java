@@ -35,9 +35,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+
+/**
+ * In this test class we are going to check that the info shown is correct
+ * and that the actions that the user can perform behaves as expected
+ */
+
 @RunWith(AndroidJUnit4.class)
 public class MainActivityRecipeSelectionTest {
 
+    private static final String RECIPE_NAME = "Nutella Pie";
+    private static final String RECIPE_SERVING = "Recipe for 8 people";
     private static final String INGREDIENT_NAME = "Graham Cracker crumbs";
     private static final String STEP_NAME = "1. Recipe Introduction";
 
@@ -45,11 +53,39 @@ public class MainActivityRecipeSelectionTest {
     public ActivityTestRule<MainActivity> mainActivityActivityTestRule =
             new ActivityTestRule<>(MainActivity.class);
 
+    /**
+     * Check the name and serving text of the Recipe
+     */
+    @Test
+    public void recipeShowsCorrectInfo(){
+        onView(withId(R.id.fragment_list))
+                .perform(RecyclerViewActions.
+                        scrollToPosition(0)).check(matches(hasDescendant(withText(RECIPE_NAME))));
+
+        onView(withId(R.id.fragment_list))
+                .perform(RecyclerViewActions.
+                        scrollToPosition(0)).check(matches(hasDescendant(withText(RECIPE_SERVING))));
+    }
 
     /**
-     * The purpose of this test is to ensure that a RecipeDetailActivity is opened when clicked
-     * in one of the Views of the MainActivity layout.
-     * <p>
+     * Check that the RecipeDetailActivity is opened when a Recipe is clicked
+     */
+    @Test
+    public void clickRecipe_OpenDetailActivity(){
+
+        // Click and open RecipeDetailActivity
+        onView(withId(R.id.fragment_list))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.ingredients_frame_layout)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.steps_frame_layout)).check(matches(isDisplayed()));
+
+    }
+
+    /**
+     * Check that the info shown in the RecipeDetailActivity is correct
+     *
      * It follows this patter:
      * <p>
      * MainActivityLayout:
@@ -69,10 +105,8 @@ public class MainActivityRecipeSelectionTest {
      * https://stackoverflow.com/questions/31394569/how-to-assert-inside-a-recyclerview-in-espresso
      * https://medium.com/@_rpiel/recyclerview-and-espresso-a-complicated-story-3f6f4179652e
      */
-
-
     @Test
-    public void clickGridViewRecipe_OpenRecipeDetailActivity() {
+    public void clickRecipe_OpenRecipeDetailActivityWithCorrectInfo() {
 
         // Click and open RecipeDetailActivity
         onView(withId(R.id.fragment_list))
@@ -87,6 +121,5 @@ public class MainActivityRecipeSelectionTest {
         onView(allOf(withId(R.id.fragment_list), isDescendantOfA(withId(R.id.steps_frame_layout))))
                 .perform(RecyclerViewActions.
                         scrollToPosition(0)).check(matches(hasDescendant(withText(STEP_NAME))));
-
     }
 }
