@@ -69,7 +69,8 @@ class NetworkUtils {
      * Obtains the recipes information JSON format within an String object
      * @return String containing the recipes
      */
-    public static String getRecipesJSON(){
+
+    static String getRecipesJSON(){
         URL url = buildRecipesURL();
         try {
             return getResponseFromHttpUrl(url);
