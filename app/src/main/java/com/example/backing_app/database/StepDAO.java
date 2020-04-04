@@ -15,13 +15,19 @@ public interface StepDAO {
     List<Step> getSteps(int recipe_index);
 
     @Query("SELECT shortDescription FROM steps WHERE + recipeId = :recipe_index")
-    List<String> getStepsShortDescription(int recipe_index);
+    List<String> getShortDescription(int recipe_index);
 
     @Query("SELECT id FROM steps WHERE + recipeId = :recipe_index")
     List<Integer> getStepsIndex(int recipe_index);
 
     @Query("SELECT * FROM steps WHERE + recipeId = :recipe_index AND id = :step_index")
     Step getStep(int recipe_index, int step_index);
+
+    @Query("SELECT videoURL FROM steps WHERE + recipeId = :recipe_index AND id = :step_index")
+    String getVideoURL(int recipe_index, int step_index);
+
+    @Query("SELECT description FROM steps WHERE + recipeId = :recipe_index AND id = :step_index")
+    String getDescription(int recipe_index, int step_index);
 
     @Insert
     void insertStep(Step step);

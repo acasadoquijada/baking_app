@@ -3,6 +3,7 @@ package com.example.backing_app.recipe;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -27,6 +28,7 @@ public class Step {
     private String shortDescription;
     private String description;
     private String videoURL;
+    @Ignore
     private String thumbnailURL;
     @ColumnInfo(name = "recipeId")
     private int recipeId;

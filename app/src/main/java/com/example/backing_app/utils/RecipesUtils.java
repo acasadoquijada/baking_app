@@ -1,6 +1,7 @@
 package com.example.backing_app.utils;
 
 import com.example.backing_app.recipe.Recipe;
+import com.example.backing_app.recipe.Step;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
@@ -22,7 +23,7 @@ public class RecipesUtils {
      */
     private static String getQualifiedStepShortDescription(int index, String stepName){
 
-        return (index + 1) + ". " + stepName;
+        return (index + ". " + stepName);
     }
 
     /**
@@ -41,7 +42,34 @@ public class RecipesUtils {
             assert recipesJSON != null;
             recipes = jsonAdapter.fromJson(recipesJSON);
 
+
+            // For the step video there are two variables:
+            // - videoURL
+            // - thumbnailURL
+            // They may or may not contain info, to
+            //
+
             assert recipes != null;
+            for(int i = 0; i < recipes.size(); i++){
+
+                for(int j = 0; j < recipes.get(i).getSteps().size(); j++){
+
+                    Step s = recipes.get(i).getSteps().get(j);
+                    String mediaURL = "";
+
+                    if (!s.getVideoURL().equals("")) {
+                        mediaURL = recipes.get(i).getSteps().get(j).getVideoURL();
+                    } else if (!s.getThumbnailURL().equals("")) {
+                        mediaURL = s.getThumbnailURL();
+                    } else {
+                        mediaURL = "";
+                    }
+
+                    s.setVideoURL(mediaURL);
+                }
+            }
+
+
             for(int i = 0; i < recipes.size(); i++){
 
                 // Add recipe id to the steps and qualified name (step_index + step_short_description)

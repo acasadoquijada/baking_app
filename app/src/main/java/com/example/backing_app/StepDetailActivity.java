@@ -7,6 +7,7 @@ import androidx.core.app.NavUtils;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +35,8 @@ public class StepDetailActivity extends AppCompatActivity {
     private int mStepIndex;
     private Step step;
     private RecipeDataBase mDatabase;
+    private String mStepDescription;
+    private String mStepMediaURL;
 
     private static String TAG = StepDetailActivity.class.getSimpleName();
 
@@ -48,7 +51,11 @@ public class StepDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
 
-        setupNavigationButtons();
+       final int orientation = getResources().getConfiguration().orientation;
+
+        if(orientation != Configuration.ORIENTATION_LANDSCAPE){
+            setupNavigationButtons();
+        }
 
         mDatabase = RecipeDataBase.getInstance(this);
 
@@ -74,12 +81,13 @@ public class StepDetailActivity extends AppCompatActivity {
             AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                    step = mDatabase.stepDAO().getStep(mRecipeIndex, mStepIndex);
+                    mStepMediaURL = mDatabase.stepDAO().getVideoURL(mRecipeIndex,mStepIndex);
+                    mStepDescription = mDatabase.stepDAO().getDescription(mRecipeIndex, mStepIndex);
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            populateUI();
+                            populateUI(orientation);
                         }
                     });
                 }
@@ -107,28 +115,25 @@ public class StepDetailActivity extends AppCompatActivity {
         });
 
     }
-    private void populateUI(){
+    private void populateUI(int orientation){
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         VideoFragment mVideoFragment = new VideoFragment();
 
-        if(!step.getVideoURL().equals("")){
-            mVideoFragment.setMediaURL(step.getVideoURL());
-        } else if(!step.getThumbnailURL().equals("")){
-            mVideoFragment.setMediaURL(step.getThumbnailURL());
-        } else {
-            mVideoFragment.setMediaURL("");
-        }
-
-        StepInstructionFragment mStepInstructionFragment = new StepInstructionFragment();
-
-        mStepInstructionFragment.setStepInstruction(step.getDescription());
+        mVideoFragment.setMediaURL(mStepMediaURL);
 
         fragmentManager.beginTransaction().add(R.id.video_frame_layout, mVideoFragment).commit();
 
-        fragmentManager.beginTransaction().add(
-                R.id.step_description_frame_layout,
-                mStepInstructionFragment).commit();
+        if(orientation != Configuration.ORIENTATION_LANDSCAPE) {
+
+            StepInstructionFragment mStepInstructionFragment = new StepInstructionFragment();
+
+            mStepInstructionFragment.setStepInstruction(mStepDescription);
+
+            fragmentManager.beginTransaction().add(
+                    R.id.step_description_frame_layout,
+                    mStepInstructionFragment).commit();
+        }
     }
 
     /**
@@ -154,12 +159,12 @@ public class StepDetailActivity extends AppCompatActivity {
         }
     }
 
-
     /**
      * Method run when the user clicks "next button"
      */
 
     private void nextStep(){
+
         AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -168,9 +173,9 @@ public class StepDetailActivity extends AppCompatActivity {
                 // is launched. Otherwise a Toast is shown
                 final int nextStepIndex = mStepIndex + 1;
 
-                Step s = mDatabase.stepDAO().getStep(mRecipeIndex, nextStepIndex);
+                String description = mDatabase.stepDAO().getDescription(mRecipeIndex, nextStepIndex);
 
-                if (s != null) {
+                if (description != null) {
 
                     runOnUiThread(new Runnable() {
                         @Override

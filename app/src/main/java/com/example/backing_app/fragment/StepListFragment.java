@@ -106,23 +106,11 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
         return rootView;
     }
 
-    /**
-     * A StepDetailActivity is launched to present to the user more info about the desired step
-     * We need to provide the step and recipe index
-     * @param clickedItemIndex of the step clicked by the user
-     */
-
     @Override
     public void onItemClick(int clickedItemIndex) {
 
 
         mCallback.onItemSelected(clickedItemIndex);
-/*        Intent intent = new Intent(getActivity(), StepDetailActivity.class);
-
-        intent.putExtra(STEP_INDEX_KEY, clickedItemIndex);
-        intent.putExtra(RECIPE_INDEX_KEY, mRecipeIndex);
-        startActivity(intent);
-*/
     }
 
     @Override

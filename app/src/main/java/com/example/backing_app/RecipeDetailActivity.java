@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
@@ -24,7 +23,6 @@ import com.example.backing_app.recipe.Step;
 import com.example.backing_app.utils.AppExecutorUtils;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX_KEY;
 
@@ -35,16 +33,18 @@ import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX_KEY;
  */
 public class RecipeDetailActivity extends AppCompatActivity implements StepListFragment.onGridElementClick{
 
+    private static final String TAG = RecipeDetailActivity.class.getSimpleName();
+
     private static final String RECIPE_INDEX_KEY = "recipe_index";
     private RecipeDataBase mDatabase;
     private List<Ingredient> mIngredients;
     private List<String> mStepsShortDescription;
     private int mOrientation;
     private int mRecipeIndex;
-    private Step step;
+    private int mStepIndex;
     private boolean mTwoPane;
-    private int mCurrentStepIndex;
-    private static final String TAG = RecipeDetailActivity.class.getSimpleName();
+
+
 
     /**
      * Using the recipe_index the necessary info is loaded, in this case is:
@@ -59,26 +59,40 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        // We only care about the intent if we want to get recipe_index
+
         if (savedInstanceState != null) {
             mRecipeIndex = savedInstanceState.getInt(RECIPE_INDEX_KEY);
+            mStepIndex = savedInstanceState.getInt(STEP_INDEX_KEY);
         } else {
             Intent intent;
             intent = getIntent();
             mRecipeIndex = intent.getIntExtra(RecipeListFragment.RECIPE_ID_KEY, 0);
         }
 
+        // Action bar to be able to go to the parent activity with just a click
         ActionBar actionBar = this.getSupportActionBar();
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        // Setup the Database
         mDatabase = RecipeDataBase.getInstance(this);
 
+        // Get the screen orientation
         mOrientation = getResources().getConfiguration().orientation;
 
-        // Know I need to check if two pane is true
+        // Common things
+
+        AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mIngredients = mDatabase.ingredientDAO().getIngredients(mRecipeIndex);
+                mStepsShortDescription = mDatabase.stepDAO().getShortDescription(mRecipeIndex);
+            }
+        });
+
+        // Check if we are in a phone or tablet
 
         if (findViewById(R.id.two_pane_layout) != null) {
             mTwoPane = true;
@@ -89,36 +103,18 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
             AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                    mIngredients = mDatabase.ingredientDAO().getIngredients(mRecipeIndex);
-                    mStepsShortDescription = mDatabase.stepDAO().getStepsShortDescription(mRecipeIndex);
-                    step = mDatabase.stepDAO().getStep(mRecipeIndex, mCurrentStepIndex);
-
-                    final String mediaURL;
-                    if (!step.getVideoURL().equals("")) {
-                        mediaURL = step.getVideoURL();
-                    } else if (!step.getThumbnailURL().equals("")) {
-                        mediaURL = step.getThumbnailURL();
-                    } else {
-                        mediaURL = "";
-                    }
-
+                    final String videoUrl = mDatabase.stepDAO().getVideoURL(mRecipeIndex, mStepIndex);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             populateUI();
-                           // populateVideo(mediaURL);
-                            populateUITwoPane(mediaURL, mStepsShortDescription.get(0));
+                            populateUITwoPane(videoUrl, mStepsShortDescription.get(mStepIndex));
                         }
                     });
                 }
             });
 
-            if (mIngredients != null && mStepsShortDescription != null) {
-                Log.d(TAG, "mIngredients size: " + mIngredients.size());
-                Log.d(TAG, "mStepShortDescription size: " + mStepsShortDescription.size());
-            }
         } else {
-
 
             // As we have the recipe index, we can obtain the info here, avoiding passing complex objects
             // such as Recipe or Step using intents
@@ -126,7 +122,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
                 @Override
                 public void run() {
                     mIngredients = mDatabase.ingredientDAO().getIngredients(mRecipeIndex);
-                    mStepsShortDescription = mDatabase.stepDAO().getStepsShortDescription(mRecipeIndex);
+                    mStepsShortDescription = mDatabase.stepDAO().getShortDescription(mRecipeIndex);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -178,25 +174,10 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
      * This method is call to populate the UI when running on a tablet
      */
 
-    private void populateVideo(String videoURL){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        VideoFragment mVideoFragment = new VideoFragment();
-
-        mVideoFragment.setMediaURL(videoURL);
-
-        fragmentManager.beginTransaction().add(R.id.video_frame_layout, mVideoFragment).commit();
-
-    }
     private void populateUITwoPane(String videoURL, String stepDescription){
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         VideoFragment mVideoFragment = new VideoFragment();
-
-        // THIS IS DONE ONLY FOR TESTING UNTIL I GET MY OWN TABLET
-        // THIS IS DONE DUE TO THE LOW RESOURCES OF MY LAPTOP
-
-//        mVideoFragment.setMediaURL("https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffddf0_-intro-yellow-cake/-intro-yellow-cake.mp4");
 
         mVideoFragment.setMediaURL(videoURL);
 
@@ -212,29 +193,18 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if(id == android.R.id.home){
-            NavUtils.navigateUpFromSameTask(this);
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(RECIPE_INDEX_KEY, mRecipeIndex);
-    }
-
-    @Override
     public void onItemSelected(final int pos) {
+
+
+        // If we are in tablet. We want to create new Video and StepDescriptionFragments and replace
+        // the current one.
+        // If we are in a phone, launch a StepDetailActivity
 
         if(mTwoPane) {
 
-            final String stepInstruction;
+            //Update current step index for correct bevahour while rotation
 
+            mStepIndex = pos;
 
             final FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -244,20 +214,13 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
             AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                    step = mDatabase.stepDAO().getStep(mRecipeIndex,pos);
+                    //step = mDatabase.stepDAO().getStep(mRecipeIndex,pos);
+                    final String videoUrl = mDatabase.stepDAO().getVideoURL(mRecipeIndex,mStepIndex);
+                    final String stepDescription = mDatabase.stepDAO().getDescription(mRecipeIndex,mStepIndex);
 
-                    final String mediaURL;
-                    if (!step.getVideoURL().equals("")) {
-                        mediaURL = step.getVideoURL();
-                    } else if (!step.getThumbnailURL().equals("")) {
-                        mediaURL = step.getThumbnailURL();
-                    } else {
-                        mediaURL = "";
-                    }
+                    videoFragment.setMediaURL(videoUrl);
 
-                    videoFragment.setMediaURL(mediaURL);
-
-                    stepInstructionFragment.setStepInstruction(step.getDescription());
+                    stepInstructionFragment.setStepInstruction(stepDescription);
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -282,6 +245,24 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
             startActivity(intent);
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == android.R.id.home){
+            NavUtils.navigateUpFromSameTask(this);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(RECIPE_INDEX_KEY, mRecipeIndex);
+        outState.putInt(STEP_INDEX_KEY, mStepIndex);
     }
 }
 
