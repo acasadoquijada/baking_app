@@ -47,7 +47,7 @@ public class MainActivityRecipeSelectionTest {
     private static final String RECIPE_NAME = "Nutella Pie";
     private static final String RECIPE_SERVING = "Recipe for 8 people";
     private static final String INGREDIENT_NAME = "Graham Cracker crumbs";
-    private static final String STEP_NAME = "1. Recipe Introduction";
+    private static final String STEP_NAME = "0. Recipe Introduction";
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityActivityTestRule =
@@ -122,4 +122,6 @@ public class MainActivityRecipeSelectionTest {
                 .perform(RecyclerViewActions.
                         scrollToPosition(0)).check(matches(hasDescendant(withText(STEP_NAME))));
     }
+
+
 }

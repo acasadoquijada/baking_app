@@ -35,8 +35,14 @@ import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 public class RecipeDetailActivityTest {
 
     private static final String INGREDIENT_NAME = "Graham Cracker crumbs";
-    private static final String STEP_NAME = "1. Recipe Introduction";
+    private static final String STEP_NAME = "0. Recipe Introduction";
     private static final String CURRENT_STEP_TEXT = "Recipe Introduction";
+    private static final String STEP_DESCRIPTION =
+            "2. Whisk the graham cracker crumbs, 50 grams (1/4 cup)" +
+            " of sugar, and 1/2 teaspoon of salt together in a medium bowl. Pour the melted " +
+            "butter and 1 teaspoon of vanilla into the dry ingredients and stir together until " +
+            "evenly mixed.";
+
 
     // This is done as the RecipeDetailActivity needs to retrieve info from the intent that launches it
     @Rule
@@ -97,5 +103,17 @@ public class RecipeDetailActivityTest {
 
         onView(allOf(withId(R.id.step_description), isDescendantOfA(withId(R.id.step_description_frame_layout))))
                 .check(matches(withText(CURRENT_STEP_TEXT)));
+    }
+
+    /**
+     * This test is only performed in large devices
+     */
+    @Test
+    public void clickOnStep_UpdatesFragmentInfo(){
+        onView(allOf(withId(R.id.fragment_list), isDescendantOfA(withId(R.id.steps_frame_layout))))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
+
+        onView(allOf(withId(R.id.step_description), isDescendantOfA(withId(R.id.step_description_frame_layout))))
+            .check(matches((withText(STEP_DESCRIPTION))));
     }
 }
