@@ -47,9 +47,9 @@ The database used contains three tables:
 
 The recipe table doesn't contain any information related to the ingredients or steps. On the other hand, those tables contains a index of their recipe as foreign key.
 
-###Screenshots
+### Screenshots
 
-Please see [here](https://github.com/acasadoquijada/baking_time/doc/images)  the full screenshot set
+Please see [here](https://github.com/acasadoquijada/baking_time/tree/master/doc/images) the full screenshot set
 
 ![mainActivityPortrait](doc/images/mainActivityPortrait.jpg) ![recipeDetailPortrait](doc/images/recipeDetailPortrait.jpg) 
 
