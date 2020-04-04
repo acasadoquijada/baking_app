@@ -8,13 +8,10 @@ This app shows different cake recipes and the steps and ingredients needed for b
 
 The user is able to navigate the app selecting the desired recipe and its different steps to obtain the information needed in order to bake this delicious cakes!
 
-TO-DO: Application organization and add some screenshots
-
-
 ### Application details
 
 
-The first time the application is launched, it obtains the recipe information from the internet and store it in a database. See 
+The first time the application is launched, it obtains the recipe information from the internet and store it in a database. See [Database schema section](https://github.com/acasadoquijada/baking_time#database-schema) for more info about this
 
 
 The application has three Activities:
@@ -46,10 +43,17 @@ The database used contains three tables:
 | String servings | String measure              | String shortDescription     |
 | String name     | String ingredientName       | String description          |
 | -               | int recipeId //@Foreign key | String videoURL             |
-| -               | - | String videoURL | int recipeId //@Foreign key |
+| -               | - | int recipeId //@Foreign key |
 
 The recipe table doesn't contain any information related to the ingredients or steps. On the other hand, those tables contains a index of their recipe as foreign key.
 
+###Screenshots
+
+Please see [here](https://github.com/acasadoquijada/baking_time/doc/images)  the full screenshot set
+
+![mainActivityPortrait](doc/images/mainActivityPortrait.jpg) ![recipeDetailPortrait](doc/images/recipeDetailPortrait.jpg) 
+
+![recipeDetailActivityTabletPortrait](doc/images/recipeDetailTablet.png)
 
 ### Relevant libraries used
 
