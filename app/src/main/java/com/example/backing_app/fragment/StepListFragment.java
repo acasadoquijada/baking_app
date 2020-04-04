@@ -26,11 +26,11 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
 
     public static final String STEP_INDEX_KEY = "step_index";
     public static final String RECIPE_INDEX_KEY = "recipe_index";
+    public static final String STEP_SHORT_DESCRIPTION = "step_short_description";
 
     private List<String> mStepsShortDescription;
     private int mOrientation;
     private int mSpanCount;
-    private int mRecipeIndex;
 
     private onGridElementClick mCallback;
 
@@ -66,10 +66,6 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
         this.mStepsShortDescription = stepsShortDescription;
     }
 
-    public void setRecipeIndex(int recipeIndex) {
-        this.mRecipeIndex = recipeIndex;
-    }
-
     /**
      * A RecyclerView is created and populated with the steps information. For this task, a
      * StepListAdapter is used
@@ -91,11 +87,13 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
 
         final View rootView = inflater.inflate(R.layout.fragment_list_layout, container, false);
 
+        int orientation = getResources().getConfiguration().orientation;
+
         RecyclerView recyclerView = rootView.findViewById(R.id.fragment_list);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), mSpanCount);
 
-        gridLayoutManager.setOrientation(mOrientation);
+        gridLayoutManager.setOrientation(orientation);
 
         recyclerView.setLayoutManager(gridLayoutManager);
 

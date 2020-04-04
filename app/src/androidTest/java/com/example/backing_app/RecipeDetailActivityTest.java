@@ -106,7 +106,7 @@ public class RecipeDetailActivityTest {
     }
 
     /**
-     * This test is only performed in large devices
+     * Check the StepDescriptionFragment is updated when a step is clicked (Only for larger devices)
      */
     @Test
     public void clickOnStep_UpdatesFragmentInfo(){

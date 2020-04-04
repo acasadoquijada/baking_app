@@ -44,8 +44,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
     private int mStepIndex;
     private boolean mTwoPane;
 
-
-
     /**
      * Using the recipe_index the necessary info is loaded, in this case is:
      * - Ingredients
@@ -58,7 +56,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
-
 
         if (savedInstanceState != null) {
             mRecipeIndex = savedInstanceState.getInt(RECIPE_INDEX_KEY);
@@ -82,8 +79,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
         // Get the screen orientation
         mOrientation = getResources().getConfiguration().orientation;
 
-        // Common things
-
+        // Common things for mTwoPanel = true and false
         AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -97,25 +93,25 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
         if (findViewById(R.id.two_pane_layout) != null) {
             mTwoPane = true;
 
-            // Now I should get the info. Steps
-            // As we have the recipe index, we can obtain the info here, avoiding passing complex objects
-            // such as Recipe or Step using intents
-            AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    final String videoUrl = mDatabase.stepDAO().getVideoURL(mRecipeIndex, mStepIndex);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            populateUI();
-                            populateUITwoPane(videoUrl, mStepsShortDescription.get(mStepIndex));
-                        }
-                    });
-                }
-            });
-
+                // Now I should get the info. Steps
+                // As we have the recipe index, we can obtain the info here, avoiding passing complex objects
+                // such as Recipe or Step using intents
+                AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        final String videoUrl = mDatabase.stepDAO().getVideoURL(mRecipeIndex, mStepIndex);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                populateUI();
+                                populateUITwoPane(videoUrl, mStepsShortDescription.get(mStepIndex));
+                            }
+                        });
+                    }
+                });
         } else {
 
+            mTwoPane = false;
             // As we have the recipe index, we can obtain the info here, avoiding passing complex objects
             // such as Recipe or Step using intents
             AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
@@ -161,7 +157,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
         }
 
         stepListFragment.setStepsShortDescription(mStepsShortDescription);
-        stepListFragment.setRecipeIndex(mRecipeIndex);
 
         ingredientListFragment.setIngredients(mIngredients);
 
@@ -185,9 +180,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
 
         mStepInstructionFragment.setStepInstruction(stepDescription);
 
-        fragmentManager.beginTransaction().add(R.id.video_frame_layout, mVideoFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.video_frame_layout, mVideoFragment).commit();
 
-        fragmentManager.beginTransaction().add(
+        fragmentManager.beginTransaction().replace(
                 R.id.step_description_frame_layout,
                 mStepInstructionFragment).commit();
     }
@@ -214,7 +209,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
             AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                    //step = mDatabase.stepDAO().getStep(mRecipeIndex,pos);
                     final String videoUrl = mDatabase.stepDAO().getVideoURL(mRecipeIndex,mStepIndex);
                     final String stepDescription = mDatabase.stepDAO().getDescription(mRecipeIndex,mStepIndex);
 

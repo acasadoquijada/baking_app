@@ -1,9 +1,11 @@
 package com.example.backing_app;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import com.example.backing_app.viewmodel.RecipeViewModel;
 
 import java.util.List;
 
+import static androidx.appcompat.app.AlertDialog.*;
 import static com.example.backing_app.fragment.RecipeListFragment.RECIPE_ID_KEY;
 
 
@@ -35,9 +38,6 @@ public class MainActivity extends AppCompatActivity implements RecipeListFragmen
     private RecipeViewModel mRecipeViewModel;
     private RecipeDataBase mDatabase;
 
-    private int orientation;
-
-
     /**
      * Loads the recipe data (if not in database, it's downloaded and stored) using a ViewModel
      * by doing so, we ensure there is no issues if this Activity get destroyed (rotation)
@@ -53,25 +53,35 @@ public class MainActivity extends AppCompatActivity implements RecipeListFragmen
 
         mRecipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
 
-        orientation = getResources().getConfiguration().orientation;
-
         mDatabase = RecipeDataBase.getInstance(this);
 
-        AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mRecipeViewModel.loadData();
-                mRecipesName = mDatabase.recipeDAO().getRecipesName();
-                mRecipesServing = mDatabase.recipeDAO().getRecipesServing();
+        if(savedInstanceState == null){
+            AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                         populateUI();
+                    if(mRecipeViewModel.loadData()){
+                        mRecipesName = mDatabase.recipeDAO().getRecipesName();
+                        mRecipesServing = mDatabase.recipeDAO().getRecipesServing();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                populateUI();
+                            }
+                        });
+
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showNoConnectionMessage();
+                            }
+                        });
                     }
-                });
-            }
-        });
+                }
+            });
+
+        }
     }
 
     /**
@@ -79,9 +89,6 @@ public class MainActivity extends AppCompatActivity implements RecipeListFragmen
      *
      * - name
      * - servings
-     *
-     * In addition, it provides the screen orientation and the spanCount to ensure a responsive
-     * layout
      */
 
     private void populateUI(){
@@ -89,19 +96,31 @@ public class MainActivity extends AppCompatActivity implements RecipeListFragmen
 
         RecipeListFragment recipeListFragment = new RecipeListFragment();
 
-        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
-            recipeListFragment.setSpanCount(2);
-        } else{
-            recipeListFragment.setSpanCount(1);
-        }
-
-        recipeListFragment.setOrientation(LinearLayout.VERTICAL);
         recipeListFragment.setRecipesName(mRecipesName);
         recipeListFragment.setRecipesServing(mRecipesServing);
 
         fragmentManager.beginTransaction().add(R.id.recipes_frame_layout,recipeListFragment).commit();
     }
 
+    private void showNoConnectionMessage(){
+        Builder builder = new Builder(this);
+        builder.setMessage("There is no internet connection. " +
+                "\nPlease connect to the internet and restart the application");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton(
+                "Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        finish();
+                        System.exit(0);
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
     @Override
     public void onItemSelected(int pos) {
 

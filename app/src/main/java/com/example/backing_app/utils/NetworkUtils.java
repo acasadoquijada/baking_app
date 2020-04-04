@@ -1,18 +1,22 @@
 package com.example.backing_app.utils;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.URL;
 import java.util.Scanner;
 
 /**
  * Performs the http request to obtain the raw recipe data
  */
-class NetworkUtils {
+public class NetworkUtils {
 
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
@@ -80,4 +84,30 @@ class NetworkUtils {
         }
     }
 
+    /**
+     * Checks if there is internet connection.
+     * This method has been obtained from this StackOverflow post:
+     * https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out
+     *
+     * This method is used instead of other alternatives because it works in most of Android version
+     * and is a lightweight operation
+     * @return true if there is internet connection, false otherwise
+     */
+
+    public static boolean internetConnectionAvailable() {
+
+        try {
+            int timeoutMs = 1500;
+            Socket sock = new Socket();
+            SocketAddress sockaddr = new InetSocketAddress("8.8.8.8", 53);
+
+            sock.connect(sockaddr, timeoutMs);
+            sock.close();
+            return true;
+
+        } catch (IOException e) {
+            Log.e(TAG,e.toString());
+            return false;
+        }
+    }
 }

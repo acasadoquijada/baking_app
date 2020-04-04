@@ -2,6 +2,7 @@ package com.example.backing_app.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.backing_app.R;
 import com.example.backing_app.RecipeDetailActivity;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,17 +26,13 @@ import java.util.List;
 
 public class RecipeListFragment extends Fragment implements RecipeListAdapter.ItemClickListener{
 
-    private static final String orientation_token = "orientation";
-    private static final String span_count_token = "span_count";
     public static final String RECIPE_ID_KEY = "recipe_id";
+    private static final String RECIPES_NAME = "recipes_name";
+    private static final String RECIPES_SERVING = "recipes_serving";
 
     private List<String> mRecipesName;
     private List<String> mRecipesServing;
     private onGridElementClick mCallback;
-
-    private int mOrientation;
-    private int mSpanCount;
-
 
     public interface onGridElementClick{
         void onItemSelected(int pos);
@@ -49,15 +48,6 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
     public void setRecipesServing(List<String> mRecipesServing) {
         this.mRecipesServing = mRecipesServing;
     }
-
-    public void setOrientation(int orientation) {
-        this.mOrientation = orientation;
-    }
-
-    public void setSpanCount(int spanCount) {
-        this.mSpanCount = spanCount;
-    }
-
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -86,17 +76,27 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if(savedInstanceState != null){
-            mOrientation = savedInstanceState.getInt(orientation_token);
-            mSpanCount = savedInstanceState.getInt(span_count_token);
+            mRecipesServing = savedInstanceState.getStringArrayList(RECIPES_SERVING);
+            mRecipesName = savedInstanceState.getStringArrayList(RECIPES_NAME);
+        }
+
+        int orientation = getResources().getConfiguration().orientation;
+
+        int spanCount;
+
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+            spanCount = 2;
+        } else{
+            spanCount = 1;
         }
 
         final View rootView = inflater.inflate(R.layout.fragment_list_layout, container, false);
 
         RecyclerView recyclerView = rootView.findViewById(R.id.fragment_list);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), mSpanCount);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), spanCount);
 
-        gridLayoutManager.setOrientation(mOrientation);
+        gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
         recyclerView.setLayoutManager(gridLayoutManager);
 
@@ -119,7 +119,7 @@ public class RecipeListFragment extends Fragment implements RecipeListAdapter.It
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putInt(orientation_token, mOrientation);
-        outState.putInt(span_count_token, mSpanCount);
+        outState.putStringArrayList(RECIPES_NAME,(ArrayList<String>) mRecipesName);
+        outState.putStringArrayList(RECIPES_SERVING,(ArrayList<String>) mRecipesServing);
     }
 }
