@@ -2,10 +2,12 @@ package com.example.backing_app.fragment;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +19,7 @@ import com.example.backing_app.IngredientWidgetProvider;
 import com.example.backing_app.R;
 import com.example.backing_app.recipe.Ingredient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,28 +28,24 @@ import java.util.List;
 
 public class IngredientListFragment extends Fragment {
 
-    private static final String orientation_token = "orientation";
-    private static final String span_count_token = "span_count";
+    private static final String INGREDIENTS = "ingredients";
+    private static final String TWO_PANE = "two_pane";
 
     private List<Ingredient> mIngredient;
-    private int mOrientation;
-    private int mSpanCount;
+    private boolean mTwoPane;
 
     public IngredientListFragment(){
 
+    }
+
+    public void setTwoPane(boolean mTwoPane) {
+        this.mTwoPane = mTwoPane;
     }
 
     public void setIngredients(List<Ingredient> ingredients){
         mIngredient = ingredients;
     }
 
-    public void setOrientation(int orientation) {
-        this.mOrientation = orientation;
-    }
-
-    public void setSpanCount(int spanCount) {
-        this.mSpanCount = spanCount;
-    }
 
     /**
      * A RecyclerView is created and populated with the ingredients information. For this task, a
@@ -63,17 +62,29 @@ public class IngredientListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if(savedInstanceState != null){
-            mOrientation = savedInstanceState.getInt(orientation_token);
-            mSpanCount = savedInstanceState.getInt(span_count_token);
+            mIngredient = savedInstanceState.getParcelableArrayList(INGREDIENTS);
+            mTwoPane = savedInstanceState.getBoolean(TWO_PANE);
         }
 
         final View rootView = inflater.inflate(R.layout.fragment_list_layout, container, false);
 
         RecyclerView recyclerView = rootView.findViewById(R.id.fragment_list);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), mSpanCount);
+        int orientation = getResources().getConfiguration().orientation;
 
-        gridLayoutManager.setOrientation(mOrientation);
+        int spanCount = 1;
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), spanCount);
+
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE && !mTwoPane){
+            gridLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+            spanCount = 3;
+        } else{
+            gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
+            spanCount = 1;
+        }
+
+        gridLayoutManager.setSpanCount(spanCount);
 
         recyclerView.setLayoutManager(gridLayoutManager);
 
@@ -86,7 +97,7 @@ public class IngredientListFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putInt(orientation_token, mOrientation);
-        outState.putInt(span_count_token, mSpanCount);
+        outState.putParcelableArrayList(INGREDIENTS,(ArrayList<Ingredient>)mIngredient);
+        outState.putBoolean(TWO_PANE,mTwoPane);
     }
 }

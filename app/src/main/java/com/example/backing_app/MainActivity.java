@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements RecipeListFragmen
 
     private List<String> mRecipesName;
     private List<String> mRecipesServing;
-    private RecipeViewModel mRecipeViewModel;
+
     private RecipeDataBase mDatabase;
 
     /**
@@ -51,10 +51,12 @@ public class MainActivity extends AppCompatActivity implements RecipeListFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRecipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
+        final RecipeViewModel mRecipeViewModel =
+                new ViewModelProvider(this).get(RecipeViewModel.class);
 
         mDatabase = RecipeDataBase.getInstance(this);
 
+        // Only create Fragment if need it
         if(savedInstanceState == null){
             AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
                 @Override

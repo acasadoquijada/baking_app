@@ -2,10 +2,12 @@ package com.example.backing_app.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.backing_app.R;
 import com.example.backing_app.StepDetailActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StepListFragment extends Fragment implements StepListAdapter.ItemClickListener {
@@ -27,10 +30,11 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
     public static final String STEP_INDEX_KEY = "step_index";
     public static final String RECIPE_INDEX_KEY = "recipe_index";
     public static final String STEP_SHORT_DESCRIPTION = "step_short_description";
+    public static final String TWO_PANE="two_pane";
 
     private List<String> mStepsShortDescription;
-    private int mOrientation;
     private int mSpanCount;
+    private boolean mTwoPane;
 
     private onGridElementClick mCallback;
 
@@ -40,6 +44,10 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
 
     public StepListFragment() {
 
+    }
+
+    public void setTwoPane(boolean mTwoPane) {
+        this.mTwoPane = mTwoPane;
     }
 
     @Override
@@ -52,10 +60,6 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
             throw new ClassCastException(
                     context.toString() + "must implement onGridElementClick interface");
         }
-    }
-
-    public void setOrientation(int orientation) {
-        this.mOrientation = orientation;
     }
 
     public void setSpanCount(int spanCount) {
@@ -81,8 +85,9 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
                              Bundle savedInstanceState) {
 
         if(savedInstanceState != null){
-            mOrientation = savedInstanceState.getInt(orientation_token);
             mSpanCount = savedInstanceState.getInt(span_count_token);
+            mStepsShortDescription = savedInstanceState.getStringArrayList(STEP_SHORT_DESCRIPTION);
+            mTwoPane = savedInstanceState.getBoolean(TWO_PANE);
         }
 
         final View rootView = inflater.inflate(R.layout.fragment_list_layout, container, false);
@@ -91,9 +96,17 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
 
         RecyclerView recyclerView = rootView.findViewById(R.id.fragment_list);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), mSpanCount);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),1);
 
-        gridLayoutManager.setOrientation(orientation);
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE && !mTwoPane){
+            gridLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+            mSpanCount = 3;
+        } else {
+            gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
+            mSpanCount = 1;
+        }
+
+        gridLayoutManager.setSpanCount(mSpanCount);
 
         recyclerView.setLayoutManager(gridLayoutManager);
 
@@ -107,14 +120,13 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
     @Override
     public void onItemClick(int clickedItemIndex) {
 
-
         mCallback.onItemSelected(clickedItemIndex);
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-
-        outState.putInt(orientation_token, mOrientation);
         outState.putInt(span_count_token, mSpanCount);
+        outState.putStringArrayList(STEP_SHORT_DESCRIPTION, (ArrayList<String>) mStepsShortDescription);
+        outState.putBoolean(TWO_PANE,mTwoPane);
     }
 }

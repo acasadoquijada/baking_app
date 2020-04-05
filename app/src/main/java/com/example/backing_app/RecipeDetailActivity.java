@@ -19,6 +19,7 @@ import com.example.backing_app.recipe.Ingredient;
 import com.example.backing_app.fragment.IngredientListFragment;
 import com.example.backing_app.fragment.StepListFragment;
 import com.example.backing_app.fragment.RecipeListFragment;
+import com.example.backing_app.recipe.Recipe;
 import com.example.backing_app.recipe.Step;
 import com.example.backing_app.utils.AppExecutorUtils;
 
@@ -36,10 +37,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
     private static final String TAG = RecipeDetailActivity.class.getSimpleName();
 
     private static final String RECIPE_INDEX_KEY = "recipe_index";
-    private RecipeDataBase mDatabase;
     private List<Ingredient> mIngredients;
     private List<String> mStepsShortDescription;
-    private int mOrientation;
     private int mRecipeIndex;
     private int mStepIndex;
     private boolean mTwoPane;
@@ -57,15 +56,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        if (savedInstanceState != null) {
-            mRecipeIndex = savedInstanceState.getInt(RECIPE_INDEX_KEY);
-            mStepIndex = savedInstanceState.getInt(STEP_INDEX_KEY);
-        } else {
-            Intent intent;
-            intent = getIntent();
-            mRecipeIndex = intent.getIntExtra(RecipeListFragment.RECIPE_ID_KEY, 0);
-        }
-
         // Action bar to be able to go to the parent activity with just a click
         ActionBar actionBar = this.getSupportActionBar();
 
@@ -73,25 +63,36 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        // Setup the Database
-        mDatabase = RecipeDataBase.getInstance(this);
+        if (savedInstanceState != null) {
+            mRecipeIndex = savedInstanceState.getInt(RECIPE_INDEX_KEY);
+            mStepIndex = savedInstanceState.getInt(STEP_INDEX_KEY);
+        }
 
-        // Get the screen orientation
-        mOrientation = getResources().getConfiguration().orientation;
+        // Create the fragments only if need it
 
-        // Common things for mTwoPanel = true and false
-        AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mIngredients = mDatabase.ingredientDAO().getIngredients(mRecipeIndex);
-                mStepsShortDescription = mDatabase.stepDAO().getShortDescription(mRecipeIndex);
-            }
-        });
+        if (savedInstanceState == null) {
+            Intent intent;
+            intent = getIntent();
 
-        // Check if we are in a phone or tablet
+            // Get recipe index
+            mRecipeIndex = intent.getIntExtra(RecipeListFragment.RECIPE_ID_KEY, 0);
 
-        if (findViewById(R.id.two_pane_layout) != null) {
-            mTwoPane = true;
+            // Setup the Database
+            final RecipeDataBase mDatabase = RecipeDataBase.getInstance(this);
+
+            // Common things for mTwoPanel = true and false
+            AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    mIngredients = mDatabase.ingredientDAO().getIngredients(mRecipeIndex);
+                    mStepsShortDescription = mDatabase.stepDAO().getShortDescription(mRecipeIndex);
+                }
+            });
+
+            // Check if we are in a phone or tablet
+
+            if (findViewById(R.id.two_pane_layout) != null) {
+                mTwoPane = true;
 
                 // Now I should get the info. Steps
                 // As we have the recipe index, we can obtain the info here, avoiding passing complex objects
@@ -109,27 +110,28 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
                         });
                     }
                 });
-        } else {
+            } else {
 
-            mTwoPane = false;
-            // As we have the recipe index, we can obtain the info here, avoiding passing complex objects
-            // such as Recipe or Step using intents
-            AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    mIngredients = mDatabase.ingredientDAO().getIngredients(mRecipeIndex);
-                    mStepsShortDescription = mDatabase.stepDAO().getShortDescription(mRecipeIndex);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            populateUI();
-                        }
-                    });
-                }
-            });
+                mTwoPane = false;
+                // As we have the recipe index, we can obtain the info here, avoiding passing complex objects
+                // such as Recipe or Step using intents
+                AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mIngredients = mDatabase.ingredientDAO().getIngredients(mRecipeIndex);
+                        mStepsShortDescription = mDatabase.stepDAO().getShortDescription(mRecipeIndex);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                populateUI();
+                            }
+                        });
+                    }
+                });
+            }
         }
-
     }
+
     /**
      * Two Fragments are created (StepListFragment and IngredientListFragment)
      * Only the necessary info is provided to them
@@ -141,24 +143,11 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
         StepListFragment stepListFragment = new StepListFragment();
         IngredientListFragment ingredientListFragment = new IngredientListFragment();
 
-        if(mOrientation == Configuration.ORIENTATION_LANDSCAPE && !mTwoPane){
-            stepListFragment.setOrientation(LinearLayout.HORIZONTAL);
-            ingredientListFragment.setOrientation(LinearLayout.HORIZONTAL);
-
-            stepListFragment.setSpanCount(3);
-            ingredientListFragment.setSpanCount(3);
-
-        } else{
-            stepListFragment.setOrientation(LinearLayout.VERTICAL);
-            ingredientListFragment.setOrientation(LinearLayout.VERTICAL);
-
-            stepListFragment.setSpanCount(1);
-            ingredientListFragment.setSpanCount(1);
-        }
-
         stepListFragment.setStepsShortDescription(mStepsShortDescription);
+        stepListFragment.setTwoPane(mTwoPane);
 
         ingredientListFragment.setIngredients(mIngredients);
+        ingredientListFragment.setTwoPane(mTwoPane);
 
         fragmentManager.beginTransaction().add(R.id.ingredients_frame_layout, ingredientListFragment).commit();
         fragmentManager.beginTransaction().add(R.id.steps_frame_layout, stepListFragment).commit();
@@ -190,7 +179,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
     @Override
     public void onItemSelected(final int pos) {
 
-
         // If we are in tablet. We want to create new Video and StepDescriptionFragments and replace
         // the current one.
         // If we are in a phone, launch a StepDetailActivity
@@ -205,7 +193,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
 
             final VideoFragment videoFragment = new VideoFragment();
             final StepInstructionFragment stepInstructionFragment = new StepInstructionFragment();
-
+            final RecipeDataBase mDatabase = RecipeDataBase.getInstance(this);
             AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {

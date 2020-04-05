@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
@@ -17,10 +18,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.backing_app.database.RecipeDataBase;
+import com.example.backing_app.databinding.ActivityStepDetailBinding;
 import com.example.backing_app.recipe.Step;
 import com.example.backing_app.fragment.StepInstructionFragment;
 import com.example.backing_app.fragment.VideoFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
+import com.example.backing_app.databinding.ActivityStepDetailBinding.*;
+
 
 import static com.example.backing_app.fragment.StepListFragment.RECIPE_INDEX_KEY;
 import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX_KEY;
@@ -35,10 +39,10 @@ public class StepDetailActivity extends AppCompatActivity {
 
     private int mRecipeIndex;
     private int mStepIndex;
-    private Step step;
     private RecipeDataBase mDatabase;
     private String mStepDescription;
     private String mStepMediaURL;
+    private ActivityStepDetailBinding mBinding;
 
     private static String TAG = StepDetailActivity.class.getSimpleName();
 
@@ -52,7 +56,7 @@ public class StepDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-       final int orientation = getResources().getConfiguration().orientation;
+        final int orientation = getResources().getConfiguration().orientation;
 
         if(orientation == Configuration.ORIENTATION_LANDSCAPE){
             requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -62,23 +66,24 @@ public class StepDetailActivity extends AppCompatActivity {
 
         } else {
             setContentView(R.layout.activity_step_detail);
+            mBinding = DataBindingUtil.setContentView(this, R.layout.activity_step_detail);
             setupNavigationButtons();
         }
 
-        mDatabase = RecipeDataBase.getInstance(this);
+        ActionBar actionBar = this.getSupportActionBar();
 
-        // Create only new fragments when no previous instance saved
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         if(savedInstanceState != null){
             mStepIndex = savedInstanceState.getInt(STEP_INDEX_KEY);
             mRecipeIndex = savedInstanceState.getInt(RECIPE_INDEX_KEY);
-        } else {
-            ActionBar actionBar = this.getSupportActionBar();
+        }
 
-            if (actionBar != null) {
-                actionBar.setDisplayHomeAsUpEnabled(true);
-            }
+        // Create only new fragments when no previous instance saved
 
+        if(savedInstanceState == null) {
             Intent intent;
 
             intent = getIntent();
@@ -86,12 +91,13 @@ public class StepDetailActivity extends AppCompatActivity {
             mRecipeIndex = intent.getIntExtra(RECIPE_INDEX_KEY, 0);
             mStepIndex = intent.getIntExtra(STEP_INDEX_KEY, 0);
 
+            mDatabase = RecipeDataBase.getInstance(this);
+
             AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
                     mStepMediaURL = mDatabase.stepDAO().getVideoURL(mRecipeIndex,mStepIndex);
                     mStepDescription = mDatabase.stepDAO().getDescription(mRecipeIndex, mStepIndex);
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -104,18 +110,15 @@ public class StepDetailActivity extends AppCompatActivity {
     }
 
     private void setupNavigationButtons(){
-        Button button = findViewById(R.id.next_button);
-
-        button.setOnClickListener(new View.OnClickListener() {
+        mBinding.nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 nextStep();
             }
         });
 
-        Button button1 = findViewById(R.id.previous_button);
 
-        button1.setOnClickListener(new View.OnClickListener(){
+        mBinding.previousButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 previousStep();
@@ -213,13 +216,6 @@ public class StepDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(STEP_INDEX_KEY, mStepIndex);
-        outState.putInt(RECIPE_INDEX_KEY, mRecipeIndex);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
@@ -228,5 +224,12 @@ public class StepDetailActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STEP_INDEX_KEY, mStepIndex);
+        outState.putInt(RECIPE_INDEX_KEY, mRecipeIndex);
     }
 }
