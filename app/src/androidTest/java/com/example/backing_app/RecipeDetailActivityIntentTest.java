@@ -67,8 +67,6 @@ public class RecipeDetailActivityIntentTest {
     @Test
     public void clickOnStep_CreatesCorrectIntentInfo(){
 
-        //Click
-
         onView(allOf(withId(R.id.fragment_list), isDescendantOfA(withId(R.id.steps_frame_layout))))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 

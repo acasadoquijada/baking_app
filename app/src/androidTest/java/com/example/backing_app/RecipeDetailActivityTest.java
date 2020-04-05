@@ -93,6 +93,8 @@ public class RecipeDetailActivityTest {
 
     /**
      * Check that clicking on one of the steps open a StepDetailActivity
+     * We check that the step_description_frame_layout is displayed (this happens also in large
+     * devices without launching StepDetailActivity
      */
     @Test
     public void clickOnStep_OpenStepDetailActivity(){
@@ -105,9 +107,6 @@ public class RecipeDetailActivityTest {
 
     }
 
-    /**
-     * Perform in small devices
-     */
     @Test
     public void clickOnStep_OpenStepDetailActivity_AfterRotation() {
         recipeDetailRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -145,8 +144,10 @@ public class RecipeDetailActivityTest {
     }
 
     /**
-     * Should be run only in large devices
+     * Should be run only in large devices because in small devices the landscape layout for
+     * StepDetailActivity only contains a video_frame_layout
      */
+
     @Test
     public void clickOnStep_UpdatesFragmentInfo_AfterRotation(){
 

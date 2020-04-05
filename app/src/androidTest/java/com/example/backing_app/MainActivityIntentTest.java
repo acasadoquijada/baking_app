@@ -29,7 +29,7 @@ import static org.hamcrest.core.IsNot.not;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityIntentRecipeSelectionTest {
+public class MainActivityIntentTest {
 
     @Rule
     public IntentsTestRule<MainActivity> mStepDetailRule =

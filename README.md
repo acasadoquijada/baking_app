@@ -47,6 +47,17 @@ The database used contains three tables:
 
 The recipe table doesn't contain any information related to the ingredients or steps. On the other hand, those tables contains a index of their recipe as foreign key.
 
+### Android testing
+
+There are four test classes with Intrument tests within the com.example.backing_app(androidTest) package. Some of this tests are specific to small devices (smartphone) and another for large devices(tablets). 
+
+* ***MainActivityTest***: Test in both
+* ***MainActivityIntentTest***: Test in both
+* ***RecipeDetailActivityTest***: Test in both
+* ***RecipeDetailActivityIntentTest***: Test in smartphone (RecipeDetailActiviy doesn't launch StepDetailActiviy in large devices)
+* ***StepDetailActivityTest***: Test in smartphone (StepDetailActivity is not accessible in large devices)
+* ***StepDetailActivityIntentTest***:Test in smartphone (StepDetailActivity is not accessible in large devices)
+
 ### Screenshots
 
 Please see [here](https://github.com/acasadoquijada/baking_time/tree/master/doc/images) the full screenshot set

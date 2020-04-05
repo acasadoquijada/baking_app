@@ -44,7 +44,7 @@ import org.junit.runner.RunWith;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityRecipeSelectionTest {
+public class MainActivityTest {
 
     private static final String RECIPE_NAME = "Nutella Pie";
     private static final String RECIPE_SERVING = "Recipe for 8 people";
