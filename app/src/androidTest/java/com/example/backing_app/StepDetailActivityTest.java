@@ -2,12 +2,12 @@ package com.example.backing_app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +16,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -56,7 +57,7 @@ public class StepDetailActivityTest {
     // This is done as the StepDetailActivity needs to retrieve info from the intent that launches it
 
     @Rule
-    public ActivityTestRule<StepDetailActivity> recipeDetailRule =
+    public ActivityTestRule<StepDetailActivity> stepDetailRule =
             new ActivityTestRule<StepDetailActivity>(StepDetailActivity.class) {
                 @Override
                 protected Intent getActivityIntent() {
@@ -79,6 +80,12 @@ public class StepDetailActivityTest {
                 .check(matches(withText(CURRENT_STEP_TEXT)));
     }
 
+    @Test
+    public void videoIsShowing_AfterRotate(){
+        stepDetailRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        onView(withId(R.id.video_frame_layout)).check(matches(isDisplayed()));
+    }
 
     /**
      * Check that the previous button doesn't go to a previous step if we are in the

@@ -1,5 +1,7 @@
 package com.example.backing_app;
 
+import android.content.pm.ActivityInfo;
+
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
@@ -67,6 +69,12 @@ public class MainActivityRecipeSelectionTest {
                         scrollToPosition(0)).check(matches(hasDescendant(withText(RECIPE_SERVING))));
     }
 
+    @Test
+    public void recipeShowsCorrectInfo_AfterRotation(){
+        mainActivityActivityTestRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        recipeShowsCorrectInfo();
+    }
+
     /**
      * Check that the RecipeDetailActivity is opened when a Recipe is clicked
      */
@@ -81,6 +89,12 @@ public class MainActivityRecipeSelectionTest {
 
         onView(withId(R.id.steps_frame_layout)).check(matches(isDisplayed()));
 
+    }
+
+    @Test
+    public void clickRecipe_OpenDetailActivity_AfterRotation(){
+        mainActivityActivityTestRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        clickRecipe_OpenDetailActivity();
     }
 
     /**
@@ -123,5 +137,9 @@ public class MainActivityRecipeSelectionTest {
                         scrollToPosition(0)).check(matches(hasDescendant(withText(STEP_NAME))));
     }
 
-
+    @Test
+    public void clickRecipe_OpenRecipeDetailActivityWithCorrectInfo_AfterRotation() {
+        mainActivityActivityTestRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        clickRecipe_OpenRecipeDetailActivityWithCorrectInfo();
+    }
 }

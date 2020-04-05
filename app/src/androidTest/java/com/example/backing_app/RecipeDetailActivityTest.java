@@ -2,6 +2,7 @@ package com.example.backing_app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -68,6 +69,12 @@ public class RecipeDetailActivityTest {
                         scrollToPosition(0)).check(matches(hasDescendant(withText(INGREDIENT_NAME))));
     }
 
+    @Test
+    public void ingredientFragmentLayoutShowsCorrectInfo_AfterRotation(){
+        recipeDetailRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        ingredientFragmentLayoutShowsCorrectInfo();
+    }
+
     /**
      * Check that the Ingredient info in ingredients_frame_layout is correct
      */
@@ -76,6 +83,12 @@ public class RecipeDetailActivityTest {
         onView(allOf(withId(R.id.fragment_list), isDescendantOfA(withId(R.id.steps_frame_layout))))
                 .perform(RecyclerViewActions.
                         scrollToPosition(0)).check(matches(hasDescendant(withText(STEP_NAME))));
+    }
+
+    @Test
+    public void stepFragmentLayoutShowsCorrectInfo_AfterRotation(){
+        recipeDetailRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        stepFragmentLayoutShowsCorrectInfo();
     }
 
     /**
@@ -93,8 +106,22 @@ public class RecipeDetailActivityTest {
     }
 
     /**
-     * Check the StepDetailActivity launched contains the correct info
+     * Perform in small devices
      */
+    @Test
+    public void clickOnStep_OpenStepDetailActivity_AfterRotation() {
+        recipeDetailRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        // Click on the first step
+        onView(allOf(withId(R.id.fragment_list), isDescendantOfA(withId(R.id.steps_frame_layout))))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.video_frame_layout)).check(matches(isDisplayed()));
+
+    }
+        /**
+         * Check the StepDetailActivity launched contains the correct info
+         */
     @Test
     public void clickOnStep_OpenStepDetailActivityWithCorrectInfo() {
         // Click on the first step
@@ -115,5 +142,15 @@ public class RecipeDetailActivityTest {
 
         onView(allOf(withId(R.id.step_description), isDescendantOfA(withId(R.id.step_description_frame_layout))))
             .check(matches((withText(STEP_DESCRIPTION))));
+    }
+
+    /**
+     * Should be run only in large devices
+     */
+    @Test
+    public void clickOnStep_UpdatesFragmentInfo_AfterRotation(){
+
+        recipeDetailRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        clickOnStep_UpdatesFragmentInfo();
     }
 }
