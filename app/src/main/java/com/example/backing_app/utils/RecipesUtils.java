@@ -46,8 +46,9 @@ public class RecipesUtils {
             // For the step video there are two variables:
             // - videoURL
             // - thumbnailURL
-            // They may or may not contain info, to
-            //
+            // They may or may not contain info, so for simplicity, we are going to store
+            // the mediaURL(from videoURL o thumbnailURL) into videoURL. This will make future
+            // queries more efficient
 
             assert recipes != null;
             for(int i = 0; i < recipes.size(); i++){
@@ -70,6 +71,9 @@ public class RecipesUtils {
             }
 
 
+            // Al the logic is done here to avoid increase the memory usage as the method arguments
+            // are passed as value (copied) instead of reference
+
             for(int i = 0; i < recipes.size(); i++){
 
                 // Add recipe id to the steps and qualified name (step_index + step_short_description)
@@ -91,6 +95,20 @@ public class RecipesUtils {
                 }
 
             }
+
+            // Data for the recipe index 2 steps is incorrect. Some indexes are wrong:
+            // Step 7 has index 8, step 8 has index 9...
+            // As this only happens for this recipe, we are going to use a quick fix for this
+            // specific case. In a real world database, the fix should be generic for all the
+            // recipes
+
+            int wrong_indexes_recipe_index = 2;
+            int wrong_index_start = 7;
+
+            for(int i = wrong_index_start; i < recipes.get(wrong_indexes_recipe_index).getSteps().size(); i++){
+                recipes.get(wrong_indexes_recipe_index).getSteps().get(i).setId(i);
+            }
+
 
         } catch (IOException e) {
             e.printStackTrace();

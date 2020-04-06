@@ -57,6 +57,13 @@ public class StepDetailActivity extends AppCompatActivity {
 
         if(orientation == Configuration.ORIENTATION_LANDSCAPE){
             requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+            ActionBar actionBar = this.getSupportActionBar();
+
+            if (actionBar != null) {
+                actionBar.hide();
+            }
+
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
             setContentView(R.layout.activity_step_detail);
@@ -65,13 +72,15 @@ public class StepDetailActivity extends AppCompatActivity {
             setContentView(R.layout.activity_step_detail);
             mBinding = DataBindingUtil.setContentView(this, R.layout.activity_step_detail);
             setupNavigationButtons();
+
+            ActionBar actionBar = this.getSupportActionBar();
+
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+
         }
 
-        ActionBar actionBar = this.getSupportActionBar();
-
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
 
         if(savedInstanceState != null){
             mStepIndex = savedInstanceState.getInt(STEP_INDEX);

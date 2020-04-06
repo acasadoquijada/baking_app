@@ -30,7 +30,6 @@ public class IngredientWidgetProvider extends AppWidgetProvider {
 
         String s = "";
 
-//        rv.setTextViewText(R.id.recipe_name_widget,recipe_name);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, rv);
@@ -54,6 +53,8 @@ public class IngredientWidgetProvider extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredient_widget_provider);
 
         Intent intent = new Intent(context,GridWidgetService.class);
+
+       // views.setTextViewText(R.id.recipe_name_widget,recipe_name);
 
         views.setRemoteAdapter(R.id.widget_grid_view, intent);
 

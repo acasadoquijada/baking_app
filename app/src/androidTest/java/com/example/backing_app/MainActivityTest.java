@@ -137,6 +137,9 @@ public class MainActivityTest {
                         scrollToPosition(0)).check(matches(hasDescendant(withText(STEP_NAME))));
     }
 
+    /**
+     * This test may fail due to timing issues, if so please re run it
+     */
     @Test
     public void clickRecipe_OpenRecipeDetailActivityWithCorrectInfo_AfterRotation() {
         mainActivityActivityTestRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
