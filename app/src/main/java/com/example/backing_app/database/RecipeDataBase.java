@@ -7,6 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import com.example.backing_app.recipe.SelectedRecipe;
 import com.example.backing_app.recipe.Ingredient;
 import com.example.backing_app.recipe.Recipe;
 import com.example.backing_app.recipe.Step;
@@ -24,7 +25,7 @@ import com.example.backing_app.recipe.Step;
  * database avoiding passing object such as Recipe, Ingredient or Step using intents.
  */
 
-@Database(entities = {Recipe.class, Step.class, Ingredient.class}, version = 1, exportSchema = false)
+@Database(entities = {Recipe.class, Step.class, Ingredient.class, SelectedRecipe.class}, version = 1, exportSchema = false)
 @TypeConverters({StepListConverter.class, IngredientListConverter.class})
 public abstract class RecipeDataBase extends RoomDatabase {
 

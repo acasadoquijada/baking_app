@@ -7,25 +7,22 @@ import androidx.core.app.NavUtils;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.fragment.StepInstructionFragment;
 import com.example.backing_app.fragment.VideoFragment;
+import com.example.backing_app.recipe.SelectedRecipe;
 import com.example.backing_app.recipe.Ingredient;
 import com.example.backing_app.fragment.IngredientListFragment;
 import com.example.backing_app.fragment.StepListFragment;
 import com.example.backing_app.fragment.RecipeListFragment;
-import com.example.backing_app.recipe.Recipe;
-import com.example.backing_app.recipe.Step;
 import com.example.backing_app.utils.AppExecutorUtils;
 
 import java.util.List;
 
-import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX_KEY;
+import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX;
 
 /**
  * This Activity presents more details about a recipe to the user. This are:
@@ -36,12 +33,14 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
 
     private static final String TAG = RecipeDetailActivity.class.getSimpleName();
 
-    private static final String RECIPE_INDEX_KEY = "recipe_index";
+    public static final String RECIPE_INDEX = "recipe_index";
+    public static final String RECIPE_NAME = "recipe_name";
     private List<Ingredient> mIngredients;
     private List<String> mStepsShortDescription;
     private int mRecipeIndex;
     private int mStepIndex;
     private boolean mTwoPane;
+    private String recipeName;
 
     /**
      * Using the recipe_index the necessary info is loaded, in this case is:
@@ -64,8 +63,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
         }
 
         if (savedInstanceState != null) {
-            mRecipeIndex = savedInstanceState.getInt(RECIPE_INDEX_KEY);
-            mStepIndex = savedInstanceState.getInt(STEP_INDEX_KEY);
+            mRecipeIndex = savedInstanceState.getInt(RECIPE_INDEX);
+            mStepIndex = savedInstanceState.getInt(STEP_INDEX);
         }
 
         // Create the fragments only if need it
@@ -77,17 +76,25 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
             // Get recipe index
             mRecipeIndex = intent.getIntExtra(RecipeListFragment.RECIPE_ID_KEY, 0);
 
+
             // Setup the Database
             final RecipeDataBase mDatabase = RecipeDataBase.getInstance(this);
+
+            final SelectedRecipe c = new SelectedRecipe();
+            c.setIndex(mRecipeIndex);
 
             // Common things for mTwoPanel = true and false
             AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
+                    recipeName = mDatabase.recipeDAO().getRecipeName(mRecipeIndex);
+                    mDatabase.recipeDAO().setCurrentRecipe(c);
                     mIngredients = mDatabase.ingredientDAO().getIngredients(mRecipeIndex);
                     mStepsShortDescription = mDatabase.stepDAO().getShortDescription(mRecipeIndex);
                 }
             });
+
+            IngredientUpdateService.startActionUpdateIngredients(getApplicationContext(),recipeName);
 
             // Check if we are in a phone or tablet
 
@@ -118,7 +125,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
                 AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
-                        mIngredients = mDatabase.ingredientDAO().getIngredients(mRecipeIndex);
                         mStepsShortDescription = mDatabase.stepDAO().getShortDescription(mRecipeIndex);
                         runOnUiThread(new Runnable() {
                             @Override
@@ -222,8 +228,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
         } else {
             Intent intent = new Intent(this, StepDetailActivity.class);
 
-            intent.putExtra(STEP_INDEX_KEY, pos);
-            intent.putExtra(RECIPE_INDEX_KEY, mRecipeIndex);
+            intent.putExtra(STEP_INDEX, pos);
+            intent.putExtra(RECIPE_INDEX, mRecipeIndex);
             startActivity(intent);
         }
 
@@ -243,8 +249,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(RECIPE_INDEX_KEY, mRecipeIndex);
-        outState.putInt(STEP_INDEX_KEY, mStepIndex);
+        outState.putInt(RECIPE_INDEX, mRecipeIndex);
+        outState.putInt(STEP_INDEX, mStepIndex);
     }
 }
 

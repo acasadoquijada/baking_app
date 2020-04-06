@@ -58,6 +58,7 @@ public class RecipeViewModel extends AndroidViewModel {
                         for (int j = 0; j < mRecipes.get(i).getIngredients().size(); j++) {
                             mDatabase.ingredientDAO().insertIngredient(mRecipes.get(i).getIngredients().get(j));
                         }
+
                     }
                     return true; // Data stored in database
                 }

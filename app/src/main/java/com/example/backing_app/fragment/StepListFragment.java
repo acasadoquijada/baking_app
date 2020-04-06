@@ -24,11 +24,9 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
 
     private static String TAG = StepListFragment.class.getSimpleName();
 
-    private static final String orientation_token = "orientation";
     private static final String span_count_token = "span_count";
 
-    public static final String STEP_INDEX_KEY = "step_index";
-    public static final String RECIPE_INDEX_KEY = "recipe_index";
+    public static final String STEP_INDEX = "step_index";
     public static final String STEP_SHORT_DESCRIPTION = "step_short_description";
     public static final String TWO_PANE="two_pane";
 

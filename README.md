@@ -72,6 +72,8 @@ Please see [here](https://github.com/acasadoquijada/baking_time/tree/master/doc/
 
 - [ExoPlayer](https://github.com/google/ExoPlayer) for reproducing the step videos
 
+- [dataBinding](https://developer.android.com/topic/libraries/data-binding/start)
+
 ### External resources
 
 The image shown where a step doesn't contain a video was obtained from [here](https://videomembertheme.szablonstrony.pl/wp-content/themes/videomembertheme/images/novideo.png) 

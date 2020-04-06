@@ -9,7 +9,6 @@ import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -24,8 +23,8 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static com.example.backing_app.fragment.StepListFragment.RECIPE_INDEX_KEY;
-import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX_KEY;
+import static com.example.backing_app.RecipeDetailActivity.RECIPE_INDEX;
+import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.IsNot.not;
 
@@ -46,7 +45,7 @@ public class RecipeDetailActivityIntentTest {
                     Context targetContext = InstrumentationRegistry.getInstrumentation()
                             .getTargetContext();
                     Intent result = new Intent(targetContext, RecipeDetailActivity.class);
-                    result.putExtra("recipe_id", 1);
+                    result.putExtra(RECIPE_INDEX, 1);
                     return result;
                 }
             };
@@ -71,7 +70,7 @@ public class RecipeDetailActivityIntentTest {
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         intended(allOf(
-                hasExtra(STEP_INDEX_KEY, 0),hasExtra(RECIPE_INDEX_KEY, 1)));
+                hasExtra(STEP_INDEX, 0),hasExtra(RECIPE_INDEX, 1)));
     }
 
 }

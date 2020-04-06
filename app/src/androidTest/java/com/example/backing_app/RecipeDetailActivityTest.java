@@ -22,11 +22,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.backing_app.fragment.StepListFragment.RECIPE_INDEX_KEY;
-import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX_KEY;
+import static com.example.backing_app.RecipeDetailActivity.RECIPE_INDEX;
 import static org.hamcrest.core.AllOf.allOf;
 
-import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 /**
  * In this test class we are going to check that the info shown is correct
  * and that the actions that the user can perform behaves as expected
@@ -54,7 +52,7 @@ public class RecipeDetailActivityTest {
                     Context targetContext = InstrumentationRegistry.getInstrumentation()
                             .getTargetContext();
                     Intent result = new Intent(targetContext, RecipeDetailActivity.class);
-                    result.putExtra("recipe_id", 1);
+                    result.putExtra(RECIPE_INDEX, 1);
                     return result;
                 }
             };

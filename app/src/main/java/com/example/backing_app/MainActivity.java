@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -58,9 +59,11 @@ public class MainActivity extends AppCompatActivity implements RecipeListFragmen
 
         // Only create Fragment if need it
         if(savedInstanceState == null){
+
             AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
+
 
                     if(mRecipeViewModel.loadData()){
                         mRecipesName = mDatabase.recipeDAO().getRecipesName();

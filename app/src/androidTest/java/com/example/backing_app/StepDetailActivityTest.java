@@ -8,6 +8,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.backing_app.fragment.StepListFragment;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,8 +22,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.backing_app.fragment.StepListFragment.RECIPE_INDEX_KEY;
-import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX_KEY;
+import static com.example.backing_app.RecipeDetailActivity.RECIPE_INDEX;
+import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX;
 import static org.hamcrest.core.AllOf.allOf;
 
 
@@ -52,7 +54,7 @@ public class StepDetailActivityTest {
             "at least 2 hours. Then it's ready to serve!";
 
     private static final int STEP_NUMBER = 3;
-    private static final int RECIPE_INDEX = 1;
+    private static final int RECIPE = 1;
 
     // This is done as the StepDetailActivity needs to retrieve info from the intent that launches it
 
@@ -64,8 +66,8 @@ public class StepDetailActivityTest {
                     Context targetContext = InstrumentationRegistry.getInstrumentation()
                             .getTargetContext();
                     Intent result = new Intent(targetContext, StepDetailActivity.class);
-                    result.putExtra(STEP_INDEX_KEY, STEP_NUMBER);
-                    result.putExtra(RECIPE_INDEX_KEY, RECIPE_INDEX);
+                    result.putExtra(STEP_INDEX, STEP_NUMBER);
+                    result.putExtra(RECIPE_INDEX, RECIPE);
                     return result;
                 }
             };

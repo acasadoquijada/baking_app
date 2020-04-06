@@ -4,7 +4,7 @@
     android:initialLayout="@layout/ingredient_widget_provider"
     android:minWidth="40dp"
     android:minHeight="40dp"
-    android:previewImage="@drawable/ic_launcher_background"
+    android:previewImage="@drawable/ic_launcher_foreground"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen"/>

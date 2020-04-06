@@ -14,20 +14,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.databinding.ActivityStepDetailBinding;
-import com.example.backing_app.recipe.Step;
 import com.example.backing_app.fragment.StepInstructionFragment;
 import com.example.backing_app.fragment.VideoFragment;
 import com.example.backing_app.utils.AppExecutorUtils;
-import com.example.backing_app.databinding.ActivityStepDetailBinding.*;
 
 
-import static com.example.backing_app.fragment.StepListFragment.RECIPE_INDEX_KEY;
-import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX_KEY;
+import static com.example.backing_app.RecipeDetailActivity.RECIPE_INDEX;
+import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX;
 
 /**
  * This Activity provides to the user with more info of a step. This info is:
@@ -77,8 +74,8 @@ public class StepDetailActivity extends AppCompatActivity {
         }
 
         if(savedInstanceState != null){
-            mStepIndex = savedInstanceState.getInt(STEP_INDEX_KEY);
-            mRecipeIndex = savedInstanceState.getInt(RECIPE_INDEX_KEY);
+            mStepIndex = savedInstanceState.getInt(STEP_INDEX);
+            mRecipeIndex = savedInstanceState.getInt(RECIPE_INDEX);
         }
 
         // Create only new fragments when no previous instance saved
@@ -88,8 +85,8 @@ public class StepDetailActivity extends AppCompatActivity {
 
             intent = getIntent();
 
-            mRecipeIndex = intent.getIntExtra(RECIPE_INDEX_KEY, 0);
-            mStepIndex = intent.getIntExtra(STEP_INDEX_KEY, 0);
+            mRecipeIndex = intent.getIntExtra(RECIPE_INDEX, 0);
+            mStepIndex = intent.getIntExtra(STEP_INDEX, 0);
 
             mDatabase = RecipeDataBase.getInstance(this);
 
@@ -159,8 +156,8 @@ public class StepDetailActivity extends AppCompatActivity {
         if(previousStepIndex >= 0){
             Intent intent = new Intent(getApplicationContext(), StepDetailActivity.class);
 
-            intent.putExtra(STEP_INDEX_KEY, previousStepIndex);
-            intent.putExtra(RECIPE_INDEX_KEY, mRecipeIndex);
+            intent.putExtra(STEP_INDEX, previousStepIndex);
+            intent.putExtra(RECIPE_INDEX, mRecipeIndex);
             startActivity(intent);
         } else {
             Toast.makeText(
@@ -193,8 +190,8 @@ public class StepDetailActivity extends AppCompatActivity {
                         public void run() {
                             Intent intent = new Intent(getApplicationContext(), StepDetailActivity.class);
 
-                            intent.putExtra(STEP_INDEX_KEY, nextStepIndex);
-                            intent.putExtra(RECIPE_INDEX_KEY, mRecipeIndex);
+                            intent.putExtra(STEP_INDEX, nextStepIndex);
+                            intent.putExtra(RECIPE_INDEX, mRecipeIndex);
                             startActivity(intent);
                         }
                     });
@@ -229,7 +226,7 @@ public class StepDetailActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(STEP_INDEX_KEY, mStepIndex);
-        outState.putInt(RECIPE_INDEX_KEY, mRecipeIndex);
+        outState.putInt(STEP_INDEX, mStepIndex);
+        outState.putInt(RECIPE_INDEX, mRecipeIndex);
     }
 }

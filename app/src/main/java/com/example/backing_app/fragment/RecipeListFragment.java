@@ -26,7 +26,7 @@ import java.util.List;
 
 public class RecipeListFragment extends Fragment implements RecipeListAdapter.ItemClickListener{
 
-    public static final String RECIPE_ID_KEY = "recipe_id";
+    public static final String RECIPE_ID_KEY = "recipe_index";
     private static final String RECIPES_NAME = "recipes_name";
     private static final String RECIPES_SERVING = "recipes_serving";
 
