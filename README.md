@@ -35,17 +35,18 @@ For storing the recipe data in a database Room has been used. For more details a
 
 The database used contains three tables:
 
+| Recipe | Ingredient | Step | Selected recipe |
+|:---------------:|:---------------------------:|:---------------------------:|:-------------------:|
+| int id //@key | int key //@key | int key //@key autogenerate | int key = 1; //@key |
+| String name | float quantity | int id | int index |
+| String servings | String measure | String shortDescription | - |
+| String name | String ingredientName | String description | - |
+| - | int recipeId //@Foreign key | String videoURL | - |
+| - | - | int recipeId //@Foreign key | - |
 
-| Recipe          | Ingredient                  | Step                        |
-|-----------------|-----------------------------|-----------------------------|
-| int id //@key   | int key //@key              | int key //@key autogenerate |
-| String name     | float quantity              | int id                      |
-| String servings | String measure              | String shortDescription     |
-| String name     | String ingredientName       | String description          |
-| -               | int recipeId //@Foreign key | String videoURL             |
-| -               | - | int recipeId //@Foreign key |
+The recipe table doesn't contain any information related to the ingredients or steps. Both, Ingredient and Step, contain a index of their recipe as foreign key.
 
-The recipe table doesn't contain any information related to the ingredients or steps. On the other hand, those tables contains a index of their recipe as foreign key.
+The Selected Recipe represents the current recipe selected by the user. This is used in the application's widget to retrieve its ingredients
 
 ### Android testing
 
