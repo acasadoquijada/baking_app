@@ -14,6 +14,11 @@ public interface IngredientDAO {
     @Query("SELECT * FROM ingredients WHERE + recipeId = :recipe_index")
     List<Ingredient> getIngredients(int recipe_index);
 
+    @Query("SELECT ingredientName FROM ingredients WHERE + recipeId = :recipe_index")
+    List<String> getIngredientsName(int recipe_index);
+
     @Insert
     void insertIngredient(Ingredient ingredient);
+
+
 }

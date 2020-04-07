@@ -1,11 +1,12 @@
-package com.example.backing_app;
+package com.example.backing_app.widget;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.example.backing_app.R;
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.recipe.Ingredient;
 import com.example.backing_app.utils.AppExecutorUtils;
@@ -20,19 +21,19 @@ public class GridWidgetService extends RemoteViewsService{
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
 
-        Log.d("LAYOUT", "I CREATE REMOTEVIEWSFACTORY");
-
         return new GridRemoteViewsFactory(this.getApplicationContext());
     }
 }
 class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private Context mContext;
-    private List<Ingredient> mIngredients;
+    private List<String> mIngredients;
+    private int mRecipeIndex;
 
     public GridRemoteViewsFactory(Context context){
         mContext = context;
         mIngredients = new ArrayList<>();
+        mRecipeIndex = 0;
     }
 
     @Override
@@ -48,12 +49,9 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                int recipe_index = recipeDataBase.recipeDAO().getCurrentRecipe();
-                Log.d("LAYOUT","RECIPE INDEX" + recipe_index);
-              //  int recipe_index = recipeDataBase.recipeDAO().getCurrentRecipe();
+                mRecipeIndex = recipeDataBase.recipeDAO().getCurrentRecipe();
                 mIngredients.clear();
-                mIngredients = recipeDataBase.ingredientDAO().getIngredients(recipe_index);
-             //   mRecipeIndex = recipe_index;
+                mIngredients = recipeDataBase.ingredientDAO().getIngredientsName(mRecipeIndex);
             }
         });
     }
@@ -66,7 +64,6 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public int getCount() {
         if(mIngredients != null){
-            Log.d("LAYOUT:" ,"Ingredients size: " + mIngredients.size());
             return mIngredients.size();
         }
         return 0;
@@ -77,10 +74,18 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         if(mIngredients != null && mIngredients.size() > 0){
 
-            Log.d("LAYOUT::","I SHOULD BE CREATING THINGS");
-            RemoteViews views = new RemoteViews(mContext.getPackageName(),R.layout.ingredient_widget);
+            RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.ingredient_widget);
 
-            views.setTextViewText(R.id.ingredient_widget_name,mIngredients.get(position).getIngredientName());
+            views.setTextViewText(R.id.ingredient_widget_name,mIngredients.get(position));
+
+            Bundle extras = new Bundle();
+            extras.putInt(RECIPE_INDEX,mRecipeIndex);
+
+            Intent fillIntent = new Intent();
+
+            fillIntent.putExtras(extras);
+
+            views.setOnClickFillInIntent(R.id.ingredient_widget_name, fillIntent);
 
             return views;
         }

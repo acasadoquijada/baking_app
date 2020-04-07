@@ -55,10 +55,11 @@ public class MainActivity extends AppCompatActivity implements RecipeListFragmen
         final RecipeViewModel mRecipeViewModel =
                 new ViewModelProvider(this).get(RecipeViewModel.class);
 
-        mDatabase = RecipeDataBase.getInstance(this);
 
         // Only create Fragment if need it
         if(savedInstanceState == null){
+
+            mDatabase = RecipeDataBase.getInstance(this);
 
             AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
                 @Override
@@ -109,8 +110,7 @@ public class MainActivity extends AppCompatActivity implements RecipeListFragmen
 
     private void showNoConnectionMessage(){
         Builder builder = new Builder(this);
-        builder.setMessage("There is no internet connection. " +
-                "\nPlease connect to the internet and restart the application");
+        builder.setMessage(getString(R.string.no_internet));
         builder.setCancelable(false);
 
         builder.setPositiveButton(

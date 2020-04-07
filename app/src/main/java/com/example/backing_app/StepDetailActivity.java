@@ -24,6 +24,7 @@ import com.example.backing_app.utils.AppExecutorUtils;
 
 
 import static com.example.backing_app.RecipeDetailActivity.RECIPE_INDEX;
+import static com.example.backing_app.RecipeDetailActivity.RECIPE_NAME;
 import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX;
 
 /**
@@ -40,6 +41,7 @@ public class StepDetailActivity extends AppCompatActivity {
     private String mStepDescription;
     private String mStepMediaURL;
     private ActivityStepDetailBinding mBinding;
+    private String mRecipeName;
 
     private static String TAG = StepDetailActivity.class.getSimpleName();
 
@@ -85,6 +87,8 @@ public class StepDetailActivity extends AppCompatActivity {
         if(savedInstanceState != null){
             mStepIndex = savedInstanceState.getInt(STEP_INDEX);
             mRecipeIndex = savedInstanceState.getInt(RECIPE_INDEX);
+            mRecipeName = savedInstanceState.getString(RECIPE_NAME);
+            setTitle(mRecipeName);
         }
 
         // Create only new fragments when no previous instance saved
@@ -102,11 +106,13 @@ public class StepDetailActivity extends AppCompatActivity {
             AppExecutorUtils.getsInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
+                    mRecipeName = mDatabase.recipeDAO().getRecipeName(mRecipeIndex);
                     mStepMediaURL = mDatabase.stepDAO().getVideoURL(mRecipeIndex,mStepIndex);
                     mStepDescription = mDatabase.stepDAO().getDescription(mRecipeIndex, mStepIndex);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            setTitle(mRecipeName);
                             populateUI(orientation);
                         }
                     });
@@ -171,7 +177,7 @@ public class StepDetailActivity extends AppCompatActivity {
         } else {
             Toast.makeText(
                     StepDetailActivity.this,
-                    "This is the first step. No previous steps",
+                    getString(R.string.no_previous_step),
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -212,7 +218,7 @@ public class StepDetailActivity extends AppCompatActivity {
                             // Make toast, no more steps
                             Toast.makeText(
                                     StepDetailActivity.this,
-                                    "This is the last step. No more steps",
+                                    getString(R.string.no_next_step),
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
