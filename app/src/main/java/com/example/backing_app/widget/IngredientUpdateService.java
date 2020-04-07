@@ -12,11 +12,9 @@ import com.example.backing_app.R;
 
 public class IngredientUpdateService extends IntentService {
 
-    public static final String ACTION_INGREDIENT_PLANTS =
-            "com.example.baking_app.action.REMOVE";
 
-    public static final String ACTION_UPDATE_INGREDIENT_SHOWN =
-            "com.example.baking_app.action.REMOVE_WWW";
+    private static final String ACTION_UPDATE_INGREDIENT_SHOWN =
+            "com.example.baking_app.action.update_ingredients";
 
     public IngredientUpdateService() {
         super("IngredientUpdateService");

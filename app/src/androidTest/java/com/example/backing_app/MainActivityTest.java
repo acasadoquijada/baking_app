@@ -2,21 +2,11 @@ package com.example.backing_app;
 
 import android.content.pm.ActivityInfo;
 
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import androidx.test.rule.ActivityTestRule;
 
-import com.example.backing_app.fragment.IngredientListAdapter;
-import com.example.backing_app.fragment.IngredientListFragment;
-import com.example.backing_app.fragment.RecipeListAdapter;
-import com.example.backing_app.fragment.RecipeListFragment;
-import com.example.backing_app.recipe.Ingredient;
-
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -25,14 +15,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.AllOf.allOf;
 
 
-import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,7 +37,7 @@ public class MainActivityTest {
     private static final String STEP_NAME = "0. Recipe Introduction";
 
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityActivityTestRule =
+    public final ActivityTestRule<MainActivity> mainActivityActivityTestRule =
             new ActivityTestRule<>(MainActivity.class);
 
     /**

@@ -19,7 +19,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.backing_app.RecipeDetailActivity.RECIPE_INDEX;
@@ -45,7 +44,7 @@ public class RecipeDetailActivityTest {
 
     // This is done as the RecipeDetailActivity needs to retrieve info from the intent that launches it
     @Rule
-    public ActivityTestRule<RecipeDetailActivity> recipeDetailRule =
+    public final ActivityTestRule<RecipeDetailActivity> recipeDetailRule =
             new ActivityTestRule<RecipeDetailActivity>(RecipeDetailActivity.class) {
                 @Override
                 protected Intent getActivityIntent() {

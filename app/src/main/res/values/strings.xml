@@ -4,9 +4,6 @@
     <string name="serving_suffix">people</string>
     <string name="ingredients_label">Ingredients</string>
     <string name="steps_label">Steps</string>
-    <string name="step_no_video">No video available for this step</string>
-    <string name="appwidget_text">You will see the ingredients here</string>
-    <string name="add_widget">Add widget</string>
     <string name="cooking_book_view_content_description">Represents an small cooking book.
         It purpose is for decoration</string>
 

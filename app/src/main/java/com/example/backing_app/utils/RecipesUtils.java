@@ -56,7 +56,7 @@ public class RecipesUtils {
                 for(int j = 0; j < recipes.get(i).getSteps().size(); j++){
 
                     Step s = recipes.get(i).getSteps().get(j);
-                    String mediaURL = "";
+                    String mediaURL;
 
                     if (!s.getVideoURL().equals("")) {
                         mediaURL = recipes.get(i).getSteps().get(j).getVideoURL();

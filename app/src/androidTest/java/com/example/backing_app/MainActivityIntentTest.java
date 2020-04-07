@@ -33,7 +33,7 @@ public class MainActivityIntentTest {
 
     @Rule
     public IntentsTestRule<MainActivity> mStepDetailRule =
-            new IntentsTestRule<MainActivity>(MainActivity.class);
+            new IntentsTestRule<>(MainActivity.class);
 
     @Before
     public void stubIntent(){

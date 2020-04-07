@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.backing_app.database.RecipeDataBase;

@@ -8,7 +8,6 @@ import android.widget.RemoteViewsService;
 
 import com.example.backing_app.R;
 import com.example.backing_app.database.RecipeDataBase;
-import com.example.backing_app.recipe.Ingredient;
 import com.example.backing_app.utils.AppExecutorUtils;
 
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class GridWidgetService extends RemoteViewsService{
 }
 class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
-    private Context mContext;
+    private final Context mContext;
     private List<String> mIngredients;
     private int mRecipeIndex;
 

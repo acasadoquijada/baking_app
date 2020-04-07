@@ -1,7 +1,6 @@
 package com.example.backing_app.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.backing_app.R;
-import com.example.backing_app.RecipeDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;

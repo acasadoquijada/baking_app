@@ -5,13 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.backing_app.database.RecipeDataBase;
 import com.example.backing_app.fragment.RecipeListFragment;

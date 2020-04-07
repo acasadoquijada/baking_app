@@ -8,8 +8,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import com.example.backing_app.fragment.StepListFragment;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +17,6 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.backing_app.RecipeDetailActivity.RECIPE_INDEX;
@@ -59,7 +56,7 @@ public class StepDetailActivityTest {
     // This is done as the StepDetailActivity needs to retrieve info from the intent that launches it
 
     @Rule
-    public ActivityTestRule<StepDetailActivity> stepDetailRule =
+    public final ActivityTestRule<StepDetailActivity> stepDetailRule =
             new ActivityTestRule<StepDetailActivity>(StepDetailActivity.class) {
                 @Override
                 protected Intent getActivityIntent() {

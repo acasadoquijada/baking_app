@@ -1,13 +1,11 @@
 package com.example.backing_app.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,7 +13,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.backing_app.R;
-import com.example.backing_app.StepDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +24,8 @@ public class StepListFragment extends Fragment implements StepListAdapter.ItemCl
     private static final String span_count_token = "span_count";
 
     public static final String STEP_INDEX = "step_index";
-    public static final String STEP_SHORT_DESCRIPTION = "step_short_description";
-    public static final String TWO_PANE="two_pane";
+    private static final String STEP_SHORT_DESCRIPTION = "step_short_description";
+    private static final String TWO_PANE="two_pane";
 
     private List<String> mStepsShortDescription;
     private int mSpanCount;

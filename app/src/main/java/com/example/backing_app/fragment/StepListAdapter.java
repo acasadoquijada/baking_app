@@ -1,7 +1,6 @@
 package com.example.backing_app.fragment;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.backing_app.R;
@@ -25,17 +23,11 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.Fragme
     private final List<String> mSteps;
     private final ItemClickListener mItemClickListener;
 
-    private int lastStepListAdaterItemClicked;
-    private int lasStepListAdapterViewClicked;
-
-    private int help_index;
-    private View previousView;
     private static final String TAG = StepListAdapter.class.getSimpleName();
 
     public StepListAdapter(List<String> steps, ItemClickListener itemClickListener){
         mSteps = steps;
         mItemClickListener = itemClickListener;
-        lastStepListAdaterItemClicked = -1;
     }
 
     public interface ItemClickListener {

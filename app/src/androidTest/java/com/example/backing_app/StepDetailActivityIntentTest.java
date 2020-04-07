@@ -9,8 +9,6 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.example.backing_app.fragment.StepListFragment;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,10 +18,8 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.backing_app.RecipeDetailActivity.RECIPE_INDEX;
 import static com.example.backing_app.fragment.StepListFragment.STEP_INDEX;
 import static org.hamcrest.core.AllOf.allOf;

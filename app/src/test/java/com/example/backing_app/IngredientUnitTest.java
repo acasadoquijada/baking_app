@@ -1,16 +1,10 @@
 package com.example.backing_app;
 
 import com.example.backing_app.recipe.Ingredient;
-import com.example.backing_app.recipe.Recipe;
-import com.example.backing_app.utils.RecipesUtils;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
 
 public class IngredientUnitTest {
 

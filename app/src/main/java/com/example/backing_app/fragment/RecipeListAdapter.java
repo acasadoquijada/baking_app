@@ -6,11 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.backing_app.R;
 import java.util.List;
-import com.example.backing_app.databinding.RecipeFragmentBinding;
 
 
 /**
@@ -68,8 +66,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     class RecipeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView itemName;
-        private TextView itemServing;
+        private final TextView itemName;
+        private final TextView itemServing;
 
         RecipeHolder(@NonNull View itemView) {
             super(itemView);
