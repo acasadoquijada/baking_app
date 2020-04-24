@@ -24,7 +24,7 @@ The flow between them is the following:
 
 In MainActivity the recipe's name and serving is presented to the user using a Fragment (RecipeListFragment).
 
-Once the user clicks in a recipe. a DetailRecipeActivity is opened. Here the recipe's ingredients and steps are shown using two fragments (IngredientListFragment and StepListFragments)
+Once the user clicks in a recipe. a DetailRecipeActivity is opened. Here the recipe's ingredients and steps are shown using two fragments (IngredientListFragment and StepListFragments). The recipe information is obtained using a ViewModel object. It firs checks the database and if there is no information, it gets the recipe information from the internet. The use of a ViewModel for this purpose guarantees that the information is going to be recovered/stored correctly even if an event such as a screen rotation happens.
 
 The user is able to click in one of the steps to launch a StepDetailActivity containing a video illustrating how to perform the step (VideoFramgent) and a more detail description about it (StepDetailFragment). The user is able to navigate between the steps with a previous and next button. In larger devices such as tablets, the step video and description will be shown as well.
 
